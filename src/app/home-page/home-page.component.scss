@@ -1,0 +1,42 @@
+.contain-h {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+    align-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.text-h {
+    text-align: left;
+}
+
+.img-h {
+    text-align: center;
+}
+
+.img-home {
+    height: 500px;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+้h3 {
+    font-size: 30px;
+}
+
+.btn-home-more {
+    background-color: #45a049;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 18px;
+    color: white;
+    border: none;
+}

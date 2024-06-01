@@ -1,0 +1,58 @@
+<div class="contain-report">
+    <div class="text-h">
+        <h3>รายงานผลการเข้าเรียนรายบุคคล</h3>
+        <a routerLink="/report-week"><button class="btn-report-week"><i class="fas fa-calendar-week"></i>  รายสัปดาห์</button></a>
+        <a routerLink="/report"><button class="btn-report-all"><i class="far fa-calendar-alt"></i> รายงานรวม</button></a>
+        <a routerLink="/report"><button class="btn-export" style="margin-left: 10px;"><i class="fas fa-file-export"></i> Export to Excel</button></a>
+        <div class="dropdown">
+            <label for="subject-dropdown" style="font-size: 22px;">เลือกรายวิชา:</label>
+            <select id="subject-dropdown">
+                <option value="subject1">เว็บเทคโนโลยีและเว็บบริการ (Web technology and web services)</option>
+                <option value="subject2">การแปลภาษาคอมพิวเตอร์ (Compiler)</option>
+            </select>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>รายการที่</th>
+                    <th>รหัสนิสิต</th>
+                    <th>ชื่อ-สกุล</th>
+                    <th>วิชา</th>
+                    <th>รายละเอียด</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>6440200498</td>
+                    <td>นายจิตติพัฒน์ ศรีสุทัศน์</td>
+                    <td>Web Application</td>
+                    <td><a routerLink="/report-profile">ดูข้อมูล</a></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>6440200688</td>
+                    <td>นายเจษฎากร ป่ามะไพร</td>
+                    <td>Web Application</td>
+                    <td><a routerLink="/report-profile">ดูข้อมูล</a></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>6440201470</td>
+                    <td>นายทินวงศ์ พึ่งสุขแดง</td>
+                    <td>Web Application</td>
+                    <td><a routerLink="/report-profile">ดูข้อมูล</a></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>6440201900</td>
+                    <td>นายธีรพงศ์ ทันบุญ</td>
+                    <td>Web Application</td>
+                    <td><a routerLink="/report-profile">ดูข้อมูล</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <p><strong>นิสิตทั้งหมด : </strong>4 คน</p>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+.contain-login {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+    align-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-login {
+    text-align: left;
+    margin-right: 200px;
+    margin-left: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+    border: 2px solid teal;
+    width: 90%;
+    height: auto;
+    padding: 30px;
+}
+
+.img-login {
+    text-align: center;
+}
+
+.img-home {
+    height: 600px;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+้h3 {
+    font-size: 50px;
+}
+
+.btn-submit {
+    background-color: teal;
+    border-radius: 20px;
+    // padding: 0px 7px;
+    font-size: 24px;
+    color: white;
+    border: none;
+    width: 60%;
+    padding: 5px 10px;
+}
+
+.btn-forgotpsw {
+    background-color: brown;
+    border-radius: 20px;
+    font-size: 24px;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    width: 40%;
+    padding: 5px 10px;
+}
+
+#email,
+#password {
+    width: 300px;
+    /* กำหนดความกว้างให้กับช่องป้อนข้อมูล */
+    padding: 8px;
+    /* เพิ่มขนาดของพื้นที่แนบเนื้อหาเพื่อให้มีพื้นที่เพียงพอรอบตัวของข้อความ */
+    font-size: 20px;
+    /* กำหนดขนาดตัวอักษร */
+    border-radius: 5px;
+    /* กำหนดขอบมน */
+    border: 1px solid #ccc;
+    /* กำหนดเส้นขอบ */
+    margin-bottom: 10px;
+    /* กำหนดระยะห่างด้านล่าง */
+}

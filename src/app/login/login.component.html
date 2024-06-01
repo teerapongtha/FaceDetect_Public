@@ -1,0 +1,20 @@
+<div class="contain-login">
+    <div class="text-login">
+        <h1>เข้าสู่ระบบ</h1>
+        <form >
+            <label for="email" style="font-size: 24px;">Email:</label><br>
+            <input type="text" id="email" name="email" placeholder="ระบุอีเมล" #email required><br>
+
+            <label for="password" style="font-size: 24px;">Password :</label><br>
+            <input type="password" id="password" name="password" placeholder="ระบุรหัสผ่าน" #password required><br><br>
+
+            <button class="btn-submit" type="submit" (click)="login(email.value, password.value)">
+                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+            </button>
+        </form>
+        <a routerLink="/forget-password"><button class="btn-forgotpsw">ลืมรหัสผ่าน</button></a>
+    </div>
+    <div class="image-login">
+        <img src="../assets/home-img.png" class="img-home">
+    </div>
+</div>

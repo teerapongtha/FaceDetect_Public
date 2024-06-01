@@ -1,0 +1,34 @@
+<div class="contain-add-data">
+    <div class="text-h">
+        <div class="personal-info">
+            <h1>แก้ไขรายวิชา</h1>
+            <form method="post" (ngSubmit)="updateSubject()" #editForm="ngForm">
+                <div class="form-group">
+                    <label for="id_subject" style="font-size: 22px;">รหัสวิชา :</label>
+                    <input type="text" class="form-control" id="id_subject" name="id_subject" placeholder="ระบุรหัสวิชา"
+                     [(ngModel)]="SubjectUpdate.id_subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject_name" style="font-size: 22px;">ชื่อวิชา :</label>
+                    <input type="text" class="form-control" id="subject_name" name="subject_name"
+                        placeholder="ระบุชื่อวิชา" [(ngModel)]="SubjectUpdate.subject_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject_engname" style="font-size: 22px;">ชื่อภาษาอังกฤษของวิชา :</label>
+                    <input type="text" class="form-control" id="subject_engname" name="subject_engname"
+                        placeholder="ระบุชื่อภาษาอังกฤษของวิชา" [(ngModel)]="SubjectUpdate.subject_engname" required>
+                </div>
+                <div class="form-group">
+                    <label for="time_start" style="font-size: 22px;">เวลาเรียนเริ่มต้น :</label>
+                    <input type="time" class="form-control" id="time_start" name="time_start" [(ngModel)]="SubjectUpdate.time_start" required>
+                </div>
+                <div class="form-group">
+                    <label for="time_end" style="font-size: 22px;">เวลาเรียนสิ้นสุด :</label>
+                    <input type="time" class="form-control" id="time_end" name="time_end" [(ngModel)]="SubjectUpdate.time_end" required>
+                </div>
+                <button type="submit" class="btn-add"><i class="far fa-edit"></i> แก้ไขข้อมูล</button><br>
+                <button type="button" class="btn-back" routerLink="/subject-manage"><i class="fas fa-arrow-alt-circle-left"></i> ย้อนกลับ</button>
+            </form>
+        </div>
+    </div>
+</div>

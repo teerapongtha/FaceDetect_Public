@@ -1,0 +1,104 @@
+.contain-student {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    font-size: 18px;
+}
+.text-student{
+    font-size: 20px;
+}
+.btn-import {
+    background-color: #45a049;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 18px;
+    color: white;
+    border: none;
+}
+.btn-import:hover {
+    background-color: #4cb351;
+}
+
+.btn-add {
+    background-color:#0056b3;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 18px;
+    color: white;
+    border: none;
+}
+.btn-add:hover {
+    background-color: #006ce0;
+}
+
+.text-h {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.img-h {
+    text-align: center;
+}
+
+.img-home {
+    height: 500px;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+h3 {
+    font-size: 36px;
+}
+
+table {
+    width: 1080px;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #45a049;
+    font-weight: bold;
+    color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #ddd;
+}
+
+a {
+    // text-decoration: none;
+    color: #000;
+}
+.student-profile {
+    background-color: #45a049;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 2px solid #4CAF50;
+}
+.student-profile:hover {
+    background-color: #4cb351;
+}

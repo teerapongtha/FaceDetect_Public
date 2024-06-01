@@ -1,0 +1,14 @@
+<div class="container-import">
+    <h2>นำเข้าข้อมูลนิสิต</h2>
+    <form action="/student-data" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label style="margin-bottom: 10px; font-size: 24px;">เลือกไฟล์เพื่อนำเข้าข้อมูล</label><br>
+            <input type="file" class="form-control-file" id="fileInput" name="file" required accept=".xlsx, .xls"
+                style="font-size: 24px;"><br>
+            <small style="color: red; font-size: 24px;">*โปรดเลือกไฟล์ Excel (.xlsx, .xls) เท่านั้น</small>
+        </div>
+        <button type="submit" class="btn btn-primary"
+            onclick="alert('อัปโหลดข้อมูลเพิ่มเรียบร้อยแล้ว!')">อัปโหลด</button>
+        <button class="btn btn-cancel"><a routerLink="/student-manage">ย้อนกลับ</a></button>
+    </form>
+</div>

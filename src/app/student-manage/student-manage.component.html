@@ -1,0 +1,27 @@
+<div class="contain-student">
+    <div class="text-student">
+        <h3>จัดการข้อมูลนิสิต</h3>
+        <a routerLink="/student-import"><button class="btn-import"><i class="fas fa-file-import"></i> นำเข้าข้อมูลนิสิต</button></a>
+        <a routerLink="/student-add"><button class="btn-add" style="margin-left: 10px;"><i class="fas fa-user-plus"></i> เพิ่มข้อมูลนิสิต</button></a>
+        <table>
+            <thead>
+                <tr>
+                    <th>รายการที่</th>
+                    <th>รหัสนักศึกษา</th>
+                    <th>ชื่อ-สกุล</th>
+                    <th>รายละเอียด</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ student.std_id }}</td>
+                    <td>{{ student.fname }} {{ student.lname }}</td>
+                    <td><a class="student-profile" routerLink="/student-profile"><i class="fas fa-user"></i> ดูข้อมูล</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <p style="font-size: 20px;"><strong>จำนวนนักศึกษารวมทั้งหมด : </strong>{{ totalStudents }} คน</p>
+    </div>
+</div>
