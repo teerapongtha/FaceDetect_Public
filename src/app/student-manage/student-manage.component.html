@@ -16,8 +16,11 @@
                 <tr *ngFor="let student of students; let i = index">
                     <td>{{ i + 1 }}</td>
                     <td>{{ student.std_id }}</td>
-                    <td>{{ student.fname }} {{ student.lname }}</td>
-                    <td><a class="student-profile" routerLink="/student-profile"><i class="fas fa-user"></i> ดูข้อมูล</a></td>
+                    <td>{{ student.title }}{{ student.fname }} {{ student.lname }}</td>
+                    <td>
+                        <a class="student-profile" routerLink="/student-profile"><i class="fas fa-user"></i> ดูข้อมูล</a>
+                        <button class="student-edit" (click)="UpdateStudent(student)"><i class="fas fa-edit"></i> แก้ไข</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

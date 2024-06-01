@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Student } from '../model/student.model';
 import { DataService } from '../service/data.service';
 import { HttpClient } from '@angular/common/http';
@@ -17,7 +17,7 @@ export class StudentManageComponent implements OnInit {
   students: Student[] = [];
   totalStudents: number = 0;
 
-  constructor(private dataService: DataService, private http: HttpClient) { }
+  constructor(private dataService: DataService, private http: HttpClient,private route:Router) { }
 
   ngOnInit() {
     this.loadData();
@@ -33,5 +33,8 @@ export class StudentManageComponent implements OnInit {
         console.error('Error fetching students:', error);
       }
     );
+  }
+  UpdateStudent(student: any) {
+    this.route.navigate(['/student-update', student.std_id]);
   }
 }

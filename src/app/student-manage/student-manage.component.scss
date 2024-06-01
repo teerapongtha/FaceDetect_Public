@@ -89,7 +89,25 @@ a {
     background-color: #45a049;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 10px;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 2px solid #4CAF50;
+}
+.student-profile:hover {
+    background-color: #4cb351;
+}
+
+.student-edit {
+    background-color: brown;
+    border: none;
+    color: white;
+    padding: 15px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -97,8 +115,8 @@ a {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 12px;
-    border: 2px solid #4CAF50;
+    border: 2px solid rgb(206, 52, 52);
 }
-.student-profile:hover {
-    background-color: #4cb351;
+.student-edit:hover {
+    background-color: rgb(206, 52, 52);
 }

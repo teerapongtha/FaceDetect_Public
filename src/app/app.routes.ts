@@ -18,6 +18,7 @@ import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 import { SubjectAddComponent } from './subject-add/subject-add.component';
 import { SubjectEditComponent } from './subject-edit/subject-edit.component';
 import { NgModule } from '@angular/core';
+import { StudentEditComponent } from './student-edit/student-edit.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -40,5 +41,6 @@ export const routes: Routes = [
     { 'path': 'subject-update/:id', component: SubjectEditComponent },
     { 'path': 'student-manage', component: StudentManageComponent },
     { 'path': 'student-import', component: StudentImportComponent },
-    { 'path': 'student-add', component: StudentAddComponent }
+    { 'path': 'student-add', component: StudentAddComponent },
+    { 'path': 'student-update/:id', component: StudentEditComponent }
 ];

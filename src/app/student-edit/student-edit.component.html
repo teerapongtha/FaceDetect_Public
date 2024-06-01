@@ -1,0 +1,39 @@
+<div class="contain-edit-data">
+    <div class="text-h">
+      <div class="personal-info">
+        <h1>แก้ไขข้อมูลนิสิต</h1>
+        <form method="post" (ngSubmit)="updateStudent()" #editForm="ngForm">
+            <div class="form-group">
+                <label for="student-id" style="font-size: 22px;">รหัสนิสิต :</label>
+                <input type="text" class="form-control" id="student-id" name="studentId" placeholder="ระบุรหัสนิสิต" [(ngModel)]="StudentUpdate.std_id" required disabled>
+              </div>
+            <div class="dropdown">
+            <label for="title-dropdown" style="font-size: 22px;">คำนำหน้า :</label><br>
+            <select id="title-dropdown" name="title" [(ngModel)]="StudentUpdate.title" required>
+              <option value="นาย">นาย</option>
+              <option value="นางสาว">นางสาว</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fullname" style="font-size: 22px;">ชื่อ :</label>
+            <input type="text" class="form-control" id="fullname" name="firstname" placeholder="ระบุชื่อที่ต้องการแก้ไข..." [(ngModel)]="StudentUpdate.fname" required>
+          </div>
+          <div class="form-group">
+            <label for="lastname" style="font-size: 22px;">สกุล :</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="ระบุสกุลที่ต้องการแก้ไข..." [(ngModel)]="StudentUpdate.lname" required>
+          </div>
+          <div class="form-group">
+            <label for="email" style="font-size: 22px;">อีเมล :</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="ระบุอีเมลที่ต้องการแก้ไข..." [(ngModel)]="StudentUpdate.email" required>
+          </div>
+          <div class="form-group">
+            <label for="password" style="font-size: 22px;">รหัสผ่าน :</label>
+            <input type="text" class="form-control" id="password" name="password" placeholder="ระบุรหัสผ่านที่ต้องการแก้ไข..." [(ngModel)]="StudentUpdate.password" required>
+          </div>
+          <button type="submit" class="btn-add"><i class="far fa-plus-square"></i> บันทึกข้อมูล</button><br>
+          <button type="button" class="btn-back" routerLink="/student-manage"><i class="far fa-arrow-alt-circle-left"></i> ย้อนกลับ</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

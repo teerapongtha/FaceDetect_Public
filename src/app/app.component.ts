@@ -25,6 +25,7 @@ import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { StudentEditComponent } from './student-edit/student-edit.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -56,6 +57,7 @@ export const MY_FORMATS = {
     StudentManageComponent,
     StudentImportComponent,
     StudentAddComponent,
+    StudentEditComponent,
     ReportComponent,
     ReportPersonalComponent,
     ReportWeekComponent,
