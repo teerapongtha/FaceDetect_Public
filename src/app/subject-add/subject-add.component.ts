@@ -33,8 +33,9 @@ export class SubjectAddComponent implements OnInit {
   getTeacherInfo() {
     this.data.getUserData().subscribe(
       (userData) => {
-        if (userData && userData.title && userData.fname && userData.lname) {
+        if (userData && userData.title && userData.fname && userData.lname && userData.teacher_id) {
           this.teacher_name = `${userData.title} ${userData.fname} ${userData.lname}`;
+          this.teacher_id = userData.teacher_id; // เก็บ teacher_id
         } else {
           console.error('Teacher information not available');
         }
@@ -52,7 +53,7 @@ export class SubjectAddComponent implements OnInit {
       subject_engname: this.subject_engname,
       time_start: this.time_start,
       time_end: this.time_end,
-      teacher_id: this.teacher_id
+      teacher_id: this.teacher_id // ใช้ teacher_id ตอนบันทึก
     };
 
     this.http.post<any>(this.data.apiUrl + "/subject-add", SubjectData).subscribe(

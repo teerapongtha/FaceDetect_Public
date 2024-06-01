@@ -5,11 +5,14 @@ import Swal from 'sweetalert2';
 import { DataService } from '../service/data.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-checklist-edit',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule],
+  imports: [RouterLink, CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
   providers: [DataService],
   templateUrl: './checklist-edit.component.html',
   styleUrls: ['./checklist-edit.component.scss']
@@ -18,7 +21,15 @@ export class ChecklistEditComponent implements OnInit {
   ChecklistUpdate: any = {};
   subjects: any[] = [];
 
-  constructor(private dataService: DataService, private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private dataService: DataService, 
+    private http: HttpClient, 
+    private route: ActivatedRoute, 
+    private router: Router,
+    private dateAdapter: DateAdapter<Date>
+  ) { 
+    this.dateAdapter.setLocale('th-TH');
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -56,7 +67,6 @@ export class ChecklistEditComponent implements OnInit {
           'เกิดข้อผิดพลาด',
           'ไม่สามารถแก้ไขรายการได้',
           'error'
-          
         );
       }
     );

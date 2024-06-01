@@ -13,13 +13,9 @@
     background-color: #f9f9f9;
     width: 80vh;
     text-align: center;
-    border: 2px solid teal;
+    border: 2px solid #45a049;
 }
 
-
-// .text-h{
-//     text-align: left;
-// }
 .img-h {
     text-align: center;
 }
@@ -30,10 +26,6 @@
 
 h1 {
     font-size: 40px;
-}
-
-้h3 {
-    font-size: 30px;
 }
 
 .text-h {
@@ -100,6 +92,14 @@ h1 {
     margin-top: 10px;
 }
 
+.form-group select {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 5px;
+    width: 500px;
+    height: 50%;
+}
+
 .btn-cancel {
     background-color: rgb(128, 0, 0);
     color: white;
@@ -112,7 +112,7 @@ h1 {
     margin-top: 10px;
 }
 .dropdown {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .dropdown label {
@@ -125,4 +125,6 @@ h1 {
     padding: 8px;
     border-radius: 5px;
     width: 500px;
+    height: 50%;
 }
+

@@ -19,6 +19,24 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-root',
@@ -44,7 +62,14 @@ import { FormsModule } from '@angular/forms';
     ForgetPasswordComponent,
     ProfileComponent,
     ProfileEditComponent,
-    
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatSelectModule,
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'th-TH' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

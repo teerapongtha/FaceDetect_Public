@@ -1,5 +1,3 @@
-/* เพิ่มสไตล์ของรายการแสดงข้อมูล */
-
 .checklist {
     list-style-type: none;
     padding: 0;
@@ -12,6 +10,7 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: 2px solid #81c784;
+    width: auto;
 }
 
 h2 {
@@ -37,7 +36,6 @@ h2 {
     padding: 10px 20px;
     margin-left: 20px;
     background-color:#0056b3;
-    /* เปลี่ยนสีพื้นหลัง */
     color: white;
     text-align: center;
     text-decoration: none;
@@ -50,7 +48,6 @@ h2 {
 
 .btn-add:hover {
     background-color: #006ce0;
-    /* เปลี่ยนสีพื้นหลังเมื่อโฮเวอร์ */
 }
 
 .btn-detail {

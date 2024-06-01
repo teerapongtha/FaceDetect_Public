@@ -1,12 +1,11 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Checklist } from '../model/checklist.model';
 import { DataService } from '../service/data.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
-import { formatDate } from '@angular/common'; 
+import { CommonModule, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-checklist-manage',
@@ -20,12 +19,14 @@ export class ChecklistManageComponent implements OnInit {
   checklists: Checklist[] = [];
   subjects: any[] = [];
   selectedSubjectId: any = '';
+  currentTime: Date = new Date();
 
   constructor(private dataService: DataService, private http: HttpClient, private route: Router) { }
 
   ngOnInit() {
     this.loadChecklist();
     this.getSubjects();
+    this.getCurrentTime();
   }
 
   getSubjects() {
@@ -56,7 +57,7 @@ export class ChecklistManageComponent implements OnInit {
 
   onSubjectChange(event: any) {
     this.selectedSubjectId = event.target.value;
-    this.loadChecklist(); // เรียกใช้เมื่อเลือกรายวิชาใน dropdown
+    this.loadChecklist();
   }
 
   DeleteChecklist(checklist_id: number) {
@@ -104,5 +105,11 @@ export class ChecklistManageComponent implements OnInit {
     const thaiYear = year + 543;
     const thaiMonth = months[month - 1];
     return `${day} ${thaiMonth} ${thaiYear}`;
+  }
+
+  getCurrentTime() {
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
   }
 }

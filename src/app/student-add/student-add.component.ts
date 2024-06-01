@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-student-add',
   standalone: true,
-  imports: [RouterLink,CommonModule, FormsModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   providers: [DataService],
   templateUrl: './student-add.component.html',
   styleUrls: ['./student-add.component.scss']

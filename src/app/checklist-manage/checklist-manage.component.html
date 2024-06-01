@@ -17,6 +17,7 @@
           <strong>รายละเอียด : </strong>{{ checklist.detail }}<br>
           <strong>เวลาเริ่มต้นเช็คชื่อ : </strong>{{ checklist.time_start }}<br>
           <strong>เวลาสิ้นสุดเช็คชื่อ : </strong>{{ checklist.time_end }}<br>
+          <strong>เวลาปัจจุบัน : </strong>{{ currentTime | date: 'HH:mm:ss' }}<br>
           <p><strong>วันที่ : </strong>{{ formatDateThai(checklist.date) }}</p>
           <a routerLink="/attendance-record"><button class="btn-detail"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button></a>
           <button class="btn-edit" (click)="UpdateChecklist(checklist)"><i class="far fa-edit"></i> แก้ไข</button>

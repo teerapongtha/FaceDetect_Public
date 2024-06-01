@@ -6,11 +6,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import Swal from 'sweetalert2';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-checklist-create',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule],
+  imports: [RouterLink, CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule, MatInputModule],
   providers: [DataService, AuthService],
   templateUrl: './checklist-create.component.html',
   styleUrls: ['./checklist-create.component.scss']
@@ -18,7 +22,7 @@ import Swal from 'sweetalert2';
 export class ChecklistCreateComponent implements OnInit {
   title: string = '';
   detail: string = '';
-  date: string = '';
+  date: Date | null = null;
   time_start: string = '';
   time_end: string = '';
   teacher_id: string = '';
@@ -26,7 +30,15 @@ export class ChecklistCreateComponent implements OnInit {
   subject_id: string = '';
   subjects: any[] = [];
 
-  constructor(private data: DataService, private authService: AuthService, private http: HttpClient, private router: Router) { }
+  constructor(
+    private data: DataService, 
+    private authService: AuthService, 
+    private http: HttpClient, 
+    private router: Router,
+    private dateAdapter: DateAdapter<Date>
+  ) { 
+    this.dateAdapter.setLocale('th-TH');
+  }
 
   ngOnInit(): void {
     this.getTeacherInfo();
@@ -56,20 +68,22 @@ export class ChecklistCreateComponent implements OnInit {
   }
 
   ChecklistAdd(): void {
+    const formattedDate = this.formatDate(this.date);
+
     const ChecklistData = {
       title: this.title,
       detail: this.detail,
-      date: this.date,
+      date: formattedDate,
       time_start: this.time_start,
       time_end: this.time_end,
       subject_id: this.subject_id,
-      teacher_id: this.teacher_id // Use teacher ID for submission
+      teacher_id: this.teacher_id
     };
 
     this.http.post<any>(this.data.apiUrl + "/checklist-add", ChecklistData).subscribe(
       (response) => {
         Swal.fire({
-          title: 'เพิ่มรายวิชาใหม่สำเร็จ',
+          title: 'เพิ่มรายการเช็คชื่อใหม่สำเร็จ',
           text: 'บันทึกข้อมูลสำเร็จ',
           icon: 'success',
           confirmButtonText: 'ตกลง'
@@ -89,5 +103,13 @@ export class ChecklistCreateComponent implements OnInit {
         console.error(error);
       }
     );
+  }
+
+  formatDate(date: Date | null): string {
+    if (!date) return '';
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`; 
   }
 }
