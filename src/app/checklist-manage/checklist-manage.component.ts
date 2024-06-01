@@ -6,6 +6,7 @@ import { DataService } from '../service/data.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+import { formatDate } from '@angular/common'; 
 
 @Component({
   selector: 'app-checklist-manage',
@@ -92,5 +93,16 @@ export class ChecklistManageComponent implements OnInit {
   getSubjectName(subject_id: any): string {
     const subject = this.subjects.find(s => s.subject_id === subject_id);
     return subject ? subject.subject_name : '';
+  }
+
+  formatDateThai(date: string): string {
+    const months = [
+      'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+    const [year, month, day] = date.split('-').map(Number);
+    const thaiYear = year + 543;
+    const thaiMonth = months[month - 1];
+    return `${day} ${thaiMonth} ${thaiYear}`;
   }
 }
