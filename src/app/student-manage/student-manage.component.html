@@ -3,17 +3,32 @@
         <h3>จัดการข้อมูลนิสิต</h3>
         <a routerLink="/student-import"><button class="btn-import"><i class="fas fa-file-import"></i> นำเข้าข้อมูลนิสิต</button></a>
         <a routerLink="/student-add"><button class="btn-add" style="margin-left: 10px;"><i class="fas fa-user-plus"></i> เพิ่มข้อมูลนิสิต</button></a>
+        <div class="dropdown">
+            <label for="subject-dropdown">เลือกรายวิชา : </label>
+            <select id="subject-dropdown" name="subject_id" [(ngModel)]="selectedSubjectId" (change)="onSubjectChange($event)">
+              <option value="">ทั้งหมด</option>
+              <option *ngFor="let subject of subjects" [value]="subject.subject_id">
+                {{ subject.subject_name }} ({{ subject.subject_engname }})
+              </option>
+            </select>
+        </div>
+        <div class="search-box" >
+            <label for="search-input">ค้นหานิสิต : </label>
+            <input id="search-input" type="text" [(ngModel)]="searchQuery" placeholder="ค้นหารหัสนิสิตหรือชื่อ-สกุล" style="margin-left: 10px;"/>
+            <button class="btn-search" (click)="onSearchClick()"><i class="fas fa-search"></i> ค้นหา</button>
+            <button class="btn-reset" (click)="onResetClick()"><i class="fas fa-sync-alt"></i> รีเซ็ท</button>
+        </div>
         <table>
             <thead>
                 <tr>
                     <th>รายการที่</th>
-                    <th>รหัสนักศึกษา</th>
+                    <th>รหัสนิสิต</th>
                     <th>ชื่อ-สกุล</th>
                     <th>รายละเอียด</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let student of students; let i = index">
+                <tr *ngFor="let student of filteredStudents; let i = index">
                     <td>{{ i + 1 }}</td>
                     <td>{{ student.std_id }}</td>
                     <td>{{ student.title }}{{ student.fname }} {{ student.lname }}</td>

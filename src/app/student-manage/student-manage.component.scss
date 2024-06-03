@@ -120,3 +120,105 @@ a {
 .student-edit:hover {
     background-color: rgb(206, 52, 52);
 }
+
+.dropdown {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.dropdown label {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.dropdown select {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 5px;
+}
+.search-box{
+    display: flex; 
+    align-items: center; 
+    margin-top: 10px;
+}
+
+.btn-search {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin-left: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-search:hover {
+    background-color: #0056b3;
+}
+
+.btn-reset {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin-left: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-reset:hover {
+    background-color: #c82333;
+}
+/* ขนาดหน้าจอเล็กกว่า 768px */
+@media screen and (max-width: 768px) {
+    table {
+        width: 100%; /* ขยายตารางให้เต็มรูปแบบ */
+    }
+
+    th,
+    td {
+        font-size: 14px; /* ลดขนาดตัวอักษรในตาราง */
+        padding: 6px; /* ปรับขนาดเพื่อให้สัมพันธ์กับขนาดตัวอักษร */
+    }
+
+    .btn-import,
+    .btn-add,
+    .student-profile,
+    .student-edit {
+        font-size: 14px; /* ลดขนาดตัวอักษรของปุ่มและลิงก์ */
+        padding: 8px 12px; /* ปรับขนาดเพื่อให้สัมพันธ์กับขนาดตัวอักษร */
+        margin-bottom: 10px; /* เพิ่มระยะห่างด้านล่าง */
+    }
+}
+
+/* ขนาดหน้าจอเล็กกว่า 576px */
+@media screen and (max-width: 576px) {
+    table {
+        width: 100%; /* ขยายตารางให้เต็มรูปแบบ */
+    }
+
+    th,
+    td {
+        font-size: 12px; /* ลดขนาดตัวอักษรในตาราง */
+        padding: 4px; /* ปรับขนาดเพื่อให้สัมพันธ์กับขนาดตัวอักษร */
+    }
+
+    .btn-import,
+    .btn-add,
+    .student-profile,
+    .student-edit {
+        font-size: 12px; /* ลดขนาดตัวอักษรของปุ่มและลิงก์ */
+        padding: 6px 10px; /* ปรับขนาดเพื่อให้สัมพันธ์กับขนาดตัวอักษร */
+        margin-bottom: 10px; /* เพิ่มระยะห่างด้านล่าง */
+    }
+}
