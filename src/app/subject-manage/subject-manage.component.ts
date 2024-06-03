@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DataService } from '../service/data.service';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from '../model/data.model';
+import { Subject } from '../model/subject.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -32,7 +32,7 @@ export class SubjectManageComponent {
       }
     );
   }
-  DeleteSubject(subject_id: number) {
+  deleteSubject(subject_id: number) {
     Swal.fire({
       title: 'คุณแน่ใจที่จะลบรายการนี้หรือไม่?',
       text: 'การกระทำนี้ไม่สามารถยกเลิกได้!',
@@ -58,7 +58,7 @@ export class SubjectManageComponent {
       }
     });
   }
-  UpdateSubject(subject: any) {
+  updateSubject(subject: any) {
     this.route.navigate(['/subject-update', subject.subject_id]);
   }
 }
