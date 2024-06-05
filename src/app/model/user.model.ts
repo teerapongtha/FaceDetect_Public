@@ -6,5 +6,6 @@ export interface User {
     lname: string;
     password: string;
     email: string;
+    img_profiles: string;
     role: string;
 }

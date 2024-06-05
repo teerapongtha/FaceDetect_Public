@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DataService } from '../service/data.service';
 import { HttpClient } from '@angular/common/http';
@@ -56,6 +56,20 @@ export class ProfileComponent implements OnInit {
       const userId = user['std_id'] || user['teacher_id'];
       if (userId) {
         this.router.navigate(['/profile-update', userId]);
+      } else {
+        console.error('User ID is undefined');
+      }
+    } else {
+      console.error('No user data available');
+    }
+  }
+  
+  updateProfileIMG() {
+    if (this.users.length > 0) {
+      const user = this.users[0];
+      const userId = user['std_id'] || user['teacher_id'];
+      if (userId) {
+        this.router.navigate(['/profile-editIMG', userId]);
       } else {
         console.error('User ID is undefined');
       }

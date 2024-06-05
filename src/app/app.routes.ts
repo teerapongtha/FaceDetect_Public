@@ -19,6 +19,8 @@ import { SubjectAddComponent } from './subject-add/subject-add.component';
 import { SubjectEditComponent } from './subject-edit/subject-edit.component';
 import { NgModule } from '@angular/core';
 import { StudentEditComponent } from './student-edit/student-edit.component';
+import { SubjectDetailComponent } from './subject-detail/subject-detail.component';
+import { ProfileEditIMGComponent } from './profile-edit-img/profile-edit-img.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -28,16 +30,16 @@ export const routes: Routes = [
     { 'path': 'forget-password', component: ForgetPasswordComponent },
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },
-    // { 'path': 'checklist-edit', component: ChecklistEditComponent },
     { 'path': 'checklist-update/:id', component: ChecklistEditComponent },
     { 'path': 'profile', component: ProfileComponent },
     { 'path': 'profile-update/:id', component: ProfileEditComponent },
+    { 'path': 'profile-editIMG/:id', component: ProfileEditIMGComponent },
     { 'path': 'report', component: ReportComponent },
     { 'path': 'report-personal', component: ReportPersonalComponent },
     { 'path': 'report-week', component: ReportWeekComponent },
     { 'path': 'subject-manage', component: SubjectManageComponent },
+    { 'path': 'subject-detail', component: SubjectDetailComponent },
     { 'path': 'subject-add', component: SubjectAddComponent },
-    // { 'path': 'subject-edit', component: SubjectEditComponent },
     { 'path': 'subject-update/:id', component: SubjectEditComponent },
     { 'path': 'student-manage', component: StudentManageComponent },
     { 'path': 'student-import', component: StudentImportComponent },
