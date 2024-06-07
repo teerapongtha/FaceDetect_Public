@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from '../service/data.service';
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class StudentImportComponent {
   fileInput: any;
+  isLoading = false;
 
   constructor(private dataService: DataService, private http: HttpClient, private router: Router) {}
 
@@ -36,8 +37,11 @@ export class StudentImportComponent {
       const formData = new FormData();
       formData.append('file', file);
 
+      this.isLoading = true;
+
       this.http.post<any>(this.dataService.apiUrl + "/student-import", formData).subscribe(
         response => {
+          this.isLoading = false;
           Swal.fire({
             title: 'สำเร็จ',
             text: 'นำเข้าข้อมูลนิสิตใหม่สำเร็จ!',
@@ -48,6 +52,7 @@ export class StudentImportComponent {
           });
         },
         error => {
+          this.isLoading = false;
           console.error('Upload error', error);
           Swal.fire('ผิดพลาด', 'ไม่สามารถนำเข้าข้อมูลได้', 'error');
         }
@@ -56,5 +61,4 @@ export class StudentImportComponent {
       Swal.fire('ผิดพลาด', 'โปรดเลือกไฟล์ก่อน', 'error');
     }
   }
-  
 }
