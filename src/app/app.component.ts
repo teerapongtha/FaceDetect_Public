@@ -26,6 +26,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { StudentEditComponent } from './student-edit/student-edit.component';
+import { RecognitionManageComponent } from './recognition-manage/recognition-manage.component';
+import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -58,6 +60,8 @@ export const MY_FORMATS = {
     StudentImportComponent,
     StudentAddComponent,
     StudentEditComponent,
+    FaceRecognitionComponent,
+    RecognitionManageComponent,
     ReportComponent,
     ReportPersonalComponent,
     ReportWeekComponent,

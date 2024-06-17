@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, Router, ActivatedRoute, Data } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { DataService } from '../service/data.service';
 
@@ -12,13 +12,18 @@ import { DataService } from '../service/data.service';
   imports: [RouterLink, CommonModule, FormsModule],
   providers: [DataService],
   templateUrl: './profile-edit-img.component.html',
-  styleUrl: './profile-edit-img.component.scss'
-}) 
+  styleUrls: ['./profile-edit-img.component.scss']
+})
 export class ProfileEditIMGComponent {
   selectedFile: File | null = null;
-  userId: any;
+  userId: string | null = null;
+  isLoading = false;
 
-  constructor(private dataService : DataService, private http: HttpClient) {}
+  constructor(private dataService: DataService, private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+    this.route.paramMap.subscribe(params => {
+      this.userId = params.get('id');  // Assuming you pass the user ID in the URL
+    });
+  }
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
@@ -33,15 +38,20 @@ export class ProfileEditIMGComponent {
     const formData: FormData = new FormData();
     formData.append('img_profiles', this.selectedFile, this.selectedFile.name);
 
-    this.http.put<any>(this.dataService.apiUrl + `/update-img_profile/${this.userId}`, formData).subscribe(
+    this.isLoading = true;
+
+    this.http.post<any>(this.dataService.apiUrl + `/update-img_profile/${this.userId}`, formData).subscribe(
       (response) => {
+        this.isLoading = false;
         if (response.success) {
           Swal.fire('Success!', 'Profile image uploaded successfully.', 'success');
+          this.router.navigate(['/profile']);
         } else {
           Swal.fire('Error!', 'Failed to upload profile image.', 'error');
         }
       },
       (error) => {
+        this.isLoading = false;
         console.error('Error uploading profile image:', error);
         Swal.fire('Error!', 'Failed to upload profile image.', 'error');
       }

@@ -21,6 +21,8 @@ import { NgModule } from '@angular/core';
 import { StudentEditComponent } from './student-edit/student-edit.component';
 import { SubjectDetailComponent } from './subject-detail/subject-detail.component';
 import { ProfileEditIMGComponent } from './profile-edit-img/profile-edit-img.component';
+import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
+import { RecognitionManageComponent } from './recognition-manage/recognition-manage.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -34,6 +36,8 @@ export const routes: Routes = [
     { 'path': 'profile', component: ProfileComponent },
     { 'path': 'profile-update/:id', component: ProfileEditComponent },
     { 'path': 'profile-editIMG/:id', component: ProfileEditIMGComponent },
+    { 'path': 'recognition', component: FaceRecognitionComponent },
+    { 'path': 'recognition-manage', component: RecognitionManageComponent },
     { 'path': 'report', component: ReportComponent },
     { 'path': 'report-personal', component: ReportPersonalComponent },
     { 'path': 'report-week', component: ReportWeekComponent },
