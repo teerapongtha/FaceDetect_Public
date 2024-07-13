@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as faceapi from 'face-api.js';
 import { DataService } from '../service/data.service';
+import Swal from 'sweetalert2'; // เพิ่ม import Swal
 
 @Component({
   selector: 'app-face-recognition',
@@ -21,7 +22,7 @@ export class FaceRecognitionComponent implements AfterViewInit {
 
   userId: string | undefined;
 
-  constructor(private dataService: DataService, private http: HttpClient) {}
+  constructor(private dataService: DataService, private http: HttpClient, private router: Router) {}
 
   async ngAfterViewInit() {
     await this.loadFaceAPIModels();
@@ -119,12 +120,26 @@ export class FaceRecognitionComponent implements AfterViewInit {
               img.style.border = '2px solid #000';
               this.capturedImageContainer.nativeElement.innerHTML = '';
               this.capturedImageContainer.nativeElement.appendChild(img);
+
+              // Show success message and navigate to recognition-manage
+              Swal.fire({
+                title: 'สำเร็จ!',
+                text: 'บันทึกรูปภาพสำเร็จแล้ว',
+                icon: 'success',
+                confirmButtonText: 'ตกลง'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.router.navigate(['/recognition-manage']);
+                }
+              });
             } else {
               console.error('Failed to upload image:', response.error);
+              Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถอัปโหลดรูปภาพได้', 'error');
             }
           },
           (error) => {
             console.error('Error uploading image:', error);
+            Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถอัปโหลดรูปภาพได้', 'error');
           }
         );
       }

@@ -12,9 +12,8 @@ import Swal from 'sweetalert2';
   imports: [RouterLink, CommonModule, FormsModule],
   providers: [DataService],
   templateUrl: './recognition-manage.component.html',
-  styleUrl: './recognition-manage.component.scss'
+  styleUrls: ['./recognition-manage.component.scss']
 })
-
 export class RecognitionManageComponent implements OnInit {
   userDataStudent: any[] = [];
   userId: string | undefined;
@@ -73,7 +72,6 @@ export class RecognitionManageComponent implements OnInit {
         this.http.delete(`${this.dataService.apiUrl}/face-detect-img-delete/${imageId}`)
           .subscribe(
             () => {
-              // ลบข้อมูลในอาร์เรย์ของข้อมูลผู้ใช้
               this.userDataStudent = this.userDataStudent.filter(student => student.img_id !== imageId);
               Swal.fire(
                 'ลบเรียบร้อย!',

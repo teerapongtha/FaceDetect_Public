@@ -54,7 +54,7 @@ export class StudentImportComponent {
         error => {
           this.isLoading = false;
           console.error('Upload error', error);
-          Swal.fire('ผิดพลาด', 'ไม่สามารถนำเข้าข้อมูลได้', 'error');
+          Swal.fire('ผิดพลาด', 'ไม่พบข้อมูลรายวิชา', 'error');
         }
       );
     } else {

@@ -21,7 +21,7 @@ export class ProfileEditIMGComponent {
 
   constructor(private dataService: DataService, private http: HttpClient, private route: ActivatedRoute, private router: Router) {
     this.route.paramMap.subscribe(params => {
-      this.userId = params.get('id');  // Assuming you pass the user ID in the URL
+      this.userId = params.get('id');
     });
   }
 
@@ -31,7 +31,7 @@ export class ProfileEditIMGComponent {
 
   uploadFile(): void {
     if (!this.selectedFile) {
-      Swal.fire('Error!', 'Please select a file to upload.', 'error');
+      Swal.fire('เกิดข้อผิดพลาด!', 'กรุณาเลือกไฟล์ที่ต้องการอัปโหลด.', 'error');
       return;
     }
 
@@ -44,16 +44,16 @@ export class ProfileEditIMGComponent {
       (response) => {
         this.isLoading = false;
         if (response.success) {
-          Swal.fire('Success!', 'Profile image uploaded successfully.', 'success');
+          Swal.fire('สำเร็จ!', 'อัปโหลดรูปโปรไฟล์สำเร็จ.', 'success');
           this.router.navigate(['/profile']);
         } else {
-          Swal.fire('Error!', 'Failed to upload profile image.', 'error');
+          Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถอัปโหลดรูปโปรไฟล์ได้.', 'error');
         }
       },
       (error) => {
         this.isLoading = false;
         console.error('Error uploading profile image:', error);
-        Swal.fire('Error!', 'Failed to upload profile image.', 'error');
+        Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถอัปโหลดรูปโปรไฟล์ได้.', 'error');
       }
     );
   }
