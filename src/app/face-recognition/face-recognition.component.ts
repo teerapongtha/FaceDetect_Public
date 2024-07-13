@@ -89,7 +89,7 @@ export class FaceRecognitionComponent implements AfterViewInit {
     const displaySize = { width: video.videoWidth, height: video.videoHeight };
     const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
-      .withFaceExpressions();
+      .withFaceDescriptors(); // เพิ่ม .withFaceDescriptors() เพื่อสกัดค่านามสกุล
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
     if (resizedDetections.length > 0) {
@@ -105,9 +105,11 @@ export class FaceRecognitionComponent implements AfterViewInit {
         context.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
 
         const imageBlob = await new Promise<Blob>((resolve) => canvas.toBlob(resolve as any, 'image/jpeg'));
+        const faceDescriptor = resizedDetections[0].descriptor; // สกัดค่านามสกุล
 
         const formData = new FormData();
         formData.append('img_path', imageBlob, `${this.userId}.jpg`);
+        formData.append('extract_feature', JSON.stringify(faceDescriptor)); // เพิ่มค่านามสกุลใน form data
 
         this.http.post(`${this.dataService.apiUrl}/face-detect-img-add/${this.userId}`, formData).subscribe(
           (response: any) => {

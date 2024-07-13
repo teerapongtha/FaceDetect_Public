@@ -1,0 +1,28 @@
+<div class="container">
+    <h1>รายการเช็คชื่อ</h1>
+    <div class="dropdown">
+        <label for="subject-dropdown">เลือกรายวิชา:</label>
+        <select id="subject-dropdown" name="subject_id" [(ngModel)]="selectedSubjectId" (change)="onSubjectChange($event)">
+          <option value="">ทั้งหมด</option>
+          <option *ngFor="let subject of subjects" [value]="subject.subject_id">
+            {{ subject.subject_name }} ({{ subject.subject_engname }})
+          </option>
+        </select>
+    </div>
+    <ul class="checklist">
+        <li *ngFor="let checklist of checklists">
+          <div class="checklist-item">
+            <h2>{{ checklist.title }}</h2>
+            <strong>วิชา : </strong>{{ getSubjectName(checklist.subject_id) }}<br>
+            <strong>รายละเอียด : </strong>{{ checklist.detail }}<br>
+            <strong>เวลาเริ่มต้นเช็คชื่อ : </strong>{{ checklist.time_start }}<br>
+            <strong>เวลาสิ้นสุดเช็คชื่อ : </strong>{{ checklist.time_end }}<br>
+            <strong>เวลาปัจจุบัน : </strong>{{ currentTime | date: 'HH:mm:ss' }}<br>
+            <p><strong>วันที่ : </strong>{{ formatDateThai(checklist.date) }}</p>
+            <a routerLink="/attendance-record"><button class="btn-detail"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button></a>
+            <button class="btn-edit"><i class="far fa-edit"></i> ทำการเช็คชื่อ</button>
+          </div>
+        </li>
+      </ul>
+  </div>
+  

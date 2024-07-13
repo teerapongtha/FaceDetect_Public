@@ -23,6 +23,7 @@ import { SubjectDetailComponent } from './subject-detail/subject-detail.componen
 import { ProfileEditIMGComponent } from './profile-edit-img/profile-edit-img.component';
 import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
 import { RecognitionManageComponent } from './recognition-manage/recognition-manage.component';
+import { ChecklistStudentComponent } from './checklist-student/checklist-student.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -33,6 +34,7 @@ export const routes: Routes = [
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },
     { 'path': 'checklist-update/:id', component: ChecklistEditComponent },
+    { 'path': 'checklist-student', component: ChecklistStudentComponent },
     { 'path': 'profile', component: ProfileComponent },
     { 'path': 'profile-update/:id', component: ProfileEditComponent },
     { 'path': 'profile-editIMG/:id', component: ProfileEditIMGComponent },
