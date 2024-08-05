@@ -24,6 +24,7 @@ import { ProfileEditIMGComponent } from './profile-edit-img/profile-edit-img.com
 import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
 import { RecognitionManageComponent } from './recognition-manage/recognition-manage.component';
 import { ChecklistStudentComponent } from './checklist-student/checklist-student.component';
+import { FaceDetectComponent } from './face-detect/face-detect.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -39,6 +40,7 @@ export const routes: Routes = [
     { 'path': 'profile-update/:id', component: ProfileEditComponent },
     { 'path': 'profile-editIMG/:id', component: ProfileEditIMGComponent },
     { 'path': 'recognition', component: FaceRecognitionComponent },
+    { 'path': 'face-detect', component: FaceDetectComponent },
     { 'path': 'recognition-manage', component: RecognitionManageComponent },
     { 'path': 'report', component: ReportComponent },
     { 'path': 'report-personal', component: ReportPersonalComponent },

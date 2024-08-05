@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as faceapi from 'face-api.js';
 import { DataService } from '../service/data.service';
-import Swal from 'sweetalert2'; // เพิ่ม import Swal
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-face-recognition',
@@ -105,11 +105,11 @@ export class FaceRecognitionComponent implements AfterViewInit {
         context.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
 
         const imageBlob = await new Promise<Blob>((resolve) => canvas.toBlob(resolve as any, 'image/jpeg'));
-        const faceDescriptor = resizedDetections[0].descriptor; // สกัดค่านามสกุล
+        const faceDescriptor = resizedDetections[0].descriptor; 
 
         const formData = new FormData();
         formData.append('img_path', imageBlob, `${this.userId}.jpg`);
-        formData.append('extract_feature', JSON.stringify(faceDescriptor)); // เพิ่มค่านามสกุลใน form data
+        formData.append('extract_feature', JSON.stringify(faceDescriptor));
 
         this.http.post(`${this.dataService.apiUrl}/face-detect-img-add/${this.userId}`, formData).subscribe(
           (response: any) => {

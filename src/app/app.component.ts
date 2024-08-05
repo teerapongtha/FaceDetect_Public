@@ -29,6 +29,7 @@ import { StudentEditComponent } from './student-edit/student-edit.component';
 import { RecognitionManageComponent } from './recognition-manage/recognition-manage.component';
 import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
 import { ChecklistStudentComponent } from './checklist-student/checklist-student.component';
+import { FaceDetectComponent } from './face-detect/face-detect.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -63,6 +64,7 @@ export const MY_FORMATS = {
     StudentAddComponent,
     StudentEditComponent,
     FaceRecognitionComponent,
+    FaceDetectComponent,
     RecognitionManageComponent,
     ReportComponent,
     ReportPersonalComponent,
