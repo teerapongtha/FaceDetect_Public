@@ -1,10 +1,21 @@
 <div class="Detection-container">
-    <h1>การตรวจสอบใบหน้า</h1>
-    <p>Face-Detection!</p>
-    
-    <div class="video-container">
-      <video #videoElement width="720" height="560" autoplay muted></video>
-      <canvas #canvasElement></canvas>
-    </div>
+  <h1>การตรวจสอบใบหน้า</h1>
+  <p>Face-Detection!</p>
+  
+  <div class="video-container">
+    <video #videoElement width="720" height="560" autoplay muted></video>
+    <canvas #canvasElement></canvas>
+  </div>
+
+  <!-- Add button for manual verification -->
+  <button (click)="verifyFace()">ตรวจสอบใบหน้า</button>
+  
+  <!-- Display result -->
+  <div *ngIf="verificationResult" class="verification-result">
+    <h2>ผลการตรวจสอบ</h2>
+    <p><strong>ชื่อ:</strong> {{ verificationResult.fname || 'ไม่พบชื่อ' }} {{ verificationResult.lname || 'ไม่พบนามสกุล' }}</p>
+    <p><strong>ระยะทาง:</strong> {{ verificationResult.distance || 'N/A' }}</p>
+    <p><strong>ผลลัพธ์:</strong> {{ verificationResult.match ? 'ตรง' : 'ไม่ตรง' }}</p>
   </div>
   
+</div>

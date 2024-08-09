@@ -65,7 +65,7 @@ export class FaceRecognitionComponent implements AfterViewInit {
 
     video.addEventListener('play', () => {
       const canvas = this.canvasElement.nativeElement;
-      const displaySize = { width: video.width, height: video.height };
+      const displaySize = { width: video.videoWidth, height: video.videoHeight };
       faceapi.matchDimensions(canvas, displaySize);
 
       setInterval(async () => {
@@ -87,30 +87,36 @@ export class FaceRecognitionComponent implements AfterViewInit {
   async capture() {
     const video = this.videoElement.nativeElement;
     const displaySize = { width: video.videoWidth, height: video.videoHeight };
+  
+    // Detect faces and get face descriptors
     const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
-      .withFaceDescriptors(); // เพิ่ม .withFaceDescriptors() เพื่อสกัดค่านามสกุล
+      .withFaceDescriptors();
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
+  
     if (resizedDetections.length > 0) {
       const detection = resizedDetections[0].detection;
       const box = detection.box;
-
+  
+      // Create canvas to draw the captured face
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-
+      canvas.width = box.width;
+      canvas.height = box.height;
+  
       if (context) {
-        canvas.width = box.width;
-        canvas.height = box.height;
         context.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
-
+  
+        // Convert canvas to image blob
         const imageBlob = await new Promise<Blob>((resolve) => canvas.toBlob(resolve as any, 'image/jpeg'));
-        const faceDescriptor = resizedDetections[0].descriptor; 
-
+        const faceDescriptor = resizedDetections[0].descriptor;
+  
+        // Prepare form data
         const formData = new FormData();
         formData.append('img_path', imageBlob, `${this.userId}.jpg`);
         formData.append('extract_feature', JSON.stringify(faceDescriptor));
-
+  
+        // Send data to the server
         this.http.post(`${this.dataService.apiUrl}/face-detect-img-add/${this.userId}`, formData).subscribe(
           (response: any) => {
             if (response.success) {
@@ -122,7 +128,7 @@ export class FaceRecognitionComponent implements AfterViewInit {
               img.style.border = '2px solid #000';
               this.capturedImageContainer.nativeElement.innerHTML = '';
               this.capturedImageContainer.nativeElement.appendChild(img);
-
+  
               // Show success message and navigate to recognition-manage
               Swal.fire({
                 title: 'สำเร็จ!',
@@ -146,7 +152,8 @@ export class FaceRecognitionComponent implements AfterViewInit {
         );
       }
     } else {
-      console.log('No face detected');
+      Swal.fire('ไม่พบใบหน้า', 'ไม่พบใบหน้าในภาพ', 'warning');
     }
   }
+  
 }

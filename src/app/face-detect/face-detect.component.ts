@@ -19,6 +19,7 @@ export class FaceDetectComponent implements AfterViewInit {
   @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
 
   imgStdData: any[] = [];
+  verificationResult: any = null;
 
   constructor(
     private dataService: DataService,
@@ -63,14 +64,9 @@ export class FaceDetectComponent implements AfterViewInit {
           .withFaceDescriptors();
 
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        const context = canvas.getContext('2d');
-        if (context) {
-          context.clearRect(0, 0, canvas.width, canvas.height);
-          faceapi.draw.drawDetections(canvas, resizedDetections);
-          faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-
-          this.checkAndNavigate(resizedDetections);
-        }
+        // No drawing on canvas
+        // Instead, you may choose to handle detection results here if needed
+        // Example: console.log(detections);
       }, 100);
     });
   }
@@ -87,66 +83,63 @@ export class FaceDetectComponent implements AfterViewInit {
     );
   }
 
-  async checkAndNavigate(resizedDetections: any[]) {
-    const faceDescriptor = resizedDetections.length > 0 ? resizedDetections[0].descriptor : null;
-
-    if (faceDescriptor) {
-      console.log('ตรวจพบใบหน้า:', faceDescriptor);
-      console.log('ความยาว descriptor ที่ตรวจพบ:', faceDescriptor.length);
-
-      const matchingUser = this.findMatchingUser(faceDescriptor);
-      if (matchingUser) {
-        const userData = matchingUser.std;
-        const fname = userData?.fname ?? 'ไม่พบชื่อ';
-        const lname = userData?.lname ?? 'ไม่พบนามสกุล';
-
-        console.log(`พบผู้ใช้: ${fname} ${lname}`);
-        
-        // Show alert if user is detected
-        alert(`พบผู้ใช้: ${fname} ${lname}`);
-        
-        // Navigate to next page
-        this.router.navigate(['/next-page']);
-      } else {
-        console.log('ไม่พบผู้ใช้ที่ตรงกัน');
-      }
-    } else {
-      console.log('ไม่พบใบหน้าในการตรวจจับ');
-    }
-  }
-
   findMatchingUser(faceDescriptor: any) {
-    const maxDescriptorDistance = 1.00; // ค่าระยะทางสูงสุดที่ยอมรับได้
+    // Define the maximum descriptor distance for matching
+    const maxDescriptorDistance = 0.6; // Adjust this value as needed
     let bestMatch: any = null;
   
     this.imgStdData.forEach((userData) => {
       const savedDescriptor = JSON.parse(userData.extract_feature);
-      
-      if (userData && userData.std) {
-        console.log(`ตรวจสอบใบหน้ากับ: ${userData.std.fname} ${userData.std.lname}`);
-        console.log('ค่า descriptor ที่บันทึกไว้:', savedDescriptor);
-        console.log('ความยาว descriptor ที่บันทึกไว้:', savedDescriptor.length);
   
-        if (faceDescriptor.length === savedDescriptor.length) {
-          const distance = faceapi.euclideanDistance(faceDescriptor, savedDescriptor);
-          console.log(`ระยะทางไปยัง ${userData.std.fname} ${userData.std.lname}: ${distance}`);
+      if (faceDescriptor.length === savedDescriptor.length) {
+        const distance = faceapi.euclideanDistance(faceDescriptor, savedDescriptor);
   
-          // ตรวจสอบระยะทางก่อนที่จะตัดสินใจเลือก
-          if (distance <= maxDescriptorDistance) {
-            // สำหรับการเลือกผู้ใช้ที่ใกล้เคียงที่สุด
-            if (!bestMatch || distance < bestMatch.distance) {
-              bestMatch = { userData, distance };
-            }
+        console.log(`ระยะทางไปยัง ${userData.fname} ${userData.lname}: ${distance}`);
+  
+        if (distance <= maxDescriptorDistance) {
+          if (!bestMatch || distance < bestMatch.distance) {
+            bestMatch = { userData, distance };
           }
-        } else {
-          console.warn('ความยาวของ descriptors ไม่ตรงกัน');
         }
       } else {
-        console.warn('ข้อมูลผู้ใช้ไม่ครบถ้วน');
+        console.warn('ความยาวของ descriptors ไม่ตรงกัน');
       }
     });
   
-    return bestMatch ? bestMatch.userData : null;
+    return bestMatch ? bestMatch : null;
+  }
+  
+  async verifyFace() {
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
+  
+    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceDescriptors();
+  
+    const resizedDetections = faceapi.resizeResults(detections, faceapi.matchDimensions(canvas, { width: video.width, height: video.height }));
+    const faceDescriptor = resizedDetections.length > 0 ? resizedDetections[0].descriptor : null;
+  
+    if (faceDescriptor) {
+      const matchingUser = this.findMatchingUser(faceDescriptor);
+      if (matchingUser) {
+        const userData = matchingUser.userData;
+        const distance = matchingUser.distance;
+        const fname = userData?.fname ?? 'ไม่พบชื่อ';
+        const lname = userData?.lname ?? 'ไม่พบนามสกุล';
+  
+        this.verificationResult = {
+          fname,
+          lname,
+          distance: distance.toFixed(2),
+          match: distance <= 0.6 // Ensure this threshold matches your `maxDescriptorDistance`
+        };
+      } else {
+        this.verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
+      }
+    } else {
+      this.verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
+    }
   }
   
 }
