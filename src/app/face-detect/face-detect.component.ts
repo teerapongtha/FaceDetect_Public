@@ -35,10 +35,10 @@ export class FaceDetectComponent implements AfterViewInit {
 
   async loadFaceAPIModels() {
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models'),
-      faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models'),
-      faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models'),
-      faceapi.nets.faceExpressionNet.loadFromUri('/assets/models')
+      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('assets/models'),
+      faceapi.nets.faceRecognitionNet.loadFromUri('assets/models'),
+      faceapi.nets.faceExpressionNet.loadFromUri('assets/models')
     ]);
     console.log('โหลดโมเดล Face API เสร็จสิ้น');
   }
@@ -84,8 +84,8 @@ export class FaceDetectComponent implements AfterViewInit {
   }
 
   findMatchingUser(faceDescriptor: any) {
-    // Define the maximum descriptor distance for matching
-    const maxDescriptorDistance = 0.6; // Adjust this value as needed
+
+    const maxDescriptorDistance = 0.6;
     let bestMatch: any = null;
   
     this.imgStdData.forEach((userData) => {
