@@ -46,7 +46,7 @@ export class ChecklistCreateComponent implements OnInit {
   }
 
   getSubjects() {
-    this.http.get(this.data.apiUrl + '/subject-data').subscribe((data: any) => {
+    this.http.get<any[]>(`${this.data.apiUrl}/subjects/${this.teacher_id}`).subscribe((data: any) => {
       this.subjects = data;
     });
   }

@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 export class ChecklistEditComponent implements OnInit {
   ChecklistUpdate: any = {};
   subjects: any[] = [];
+  teacher_id: string = '';
 
   constructor(
     private dataService: DataService, 
@@ -34,8 +35,19 @@ export class ChecklistEditComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const itemId = params['id'];
+      this.getUserData(); // ดึงข้อมูลผู้ใช้เพื่อเอา teacher_id
       this.getChecklistData(itemId);
-      this.getSubjects();
+    });
+  }
+
+  getUserData() {
+    this.dataService.getUserData().subscribe(userData => {
+      if (userData && userData.teacher_id) {
+        this.teacher_id = userData.teacher_id;
+        this.getSubjects(); // ดึงวิชาหลังจากได้ teacher_id
+      } else {
+        console.error('ไม่พบข้อมูลผู้ใช้');
+      }
     });
   }
 
@@ -46,9 +58,11 @@ export class ChecklistEditComponent implements OnInit {
   }
 
   getSubjects() {
-    this.http.get(this.dataService.apiUrl + '/subject-data').subscribe((data: any) => {
-      this.subjects = data;
-    });
+    if (this.teacher_id) {
+      this.http.get<any[]>(`${this.dataService.apiUrl}/subjects/${this.teacher_id}`).subscribe((data: any) => {
+        this.subjects = data;
+      });
+    }
   }
 
   UpdateChecklist() {

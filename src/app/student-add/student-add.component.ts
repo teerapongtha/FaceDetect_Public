@@ -23,19 +23,38 @@ export class StudentAddComponent implements OnInit {
   subject_id: string = '';
   subjects: any[] = [];
   passwordBeforeHash: string = '';
+  teacher_id: string = ''; // เพิ่มตัวแปรสำหรับเก็บ teacher_id
 
   constructor(private dataService: DataService, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-    this.getSubjects();
+    this.getUserData();
   }
 
-  getSubjects() {
-    this.http.get(this.dataService.apiUrl + '/subject-data').subscribe((data: any) => {
-      this.subjects = data;
+  // ดึงข้อมูลผู้ใช้เพื่อให้ได้ teacher_id
+  getUserData() {
+    this.dataService.getUserData().subscribe(userData => {
+      if (userData) {
+        this.teacher_id = userData.teacher_id; // สมมติว่า teacher_id ถูกเก็บใน userData
+        this.getSubjects();
+      } else {
+        console.error('ไม่พบข้อมูลผู้ใช้');
+      }
     });
   }
 
+  // ดึงรายวิชาของอาจารย์คนนั้น
+  getSubjects() {
+    if (this.teacher_id) {
+      this.http.get<any[]>(`${this.dataService.apiUrl}/subjects/${this.teacher_id}`).subscribe((data) => {
+        this.subjects = data;
+      }, error => {
+        console.error('เกิดข้อผิดพลาดในการดึงรายวิชา:', error);
+      });
+    }
+  }
+
+  // เพิ่มข้อมูลนิสิต
   StudentAdd(): void {
     const studentData = {
       std_id: this.std_id,

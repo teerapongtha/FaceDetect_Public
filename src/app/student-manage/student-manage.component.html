@@ -6,25 +6,25 @@
         <div class="dropdown">
             <label for="subject-dropdown">เลือกรายวิชา : </label>
             <select id="subject-dropdown" name="subject_id" [(ngModel)]="selectedSubjectId" (change)="onSubjectChange($event)">
-              <option value="">ทั้งหมด</option>
+                <option value="" disabled selected hidden>--กรุณาเลือกรายวิชา--</option>
               <option *ngFor="let subject of subjects" [value]="subject.subject_id">
                 {{ subject.subject_name }} ({{ subject.subject_engname }})
               </option>
             </select>
         </div>
-        <div class="search-box" >
+        <div class="search-box" *ngIf="selectedSubjectId">
             <label for="search-input">ค้นหานิสิต : </label>
             <input id="search-input" type="text" [(ngModel)]="searchQuery" placeholder="ค้นหารหัสนิสิตหรือชื่อ-สกุล" style="margin-left: 10px;"/>
             <button class="btn-search" (click)="onSearchClick()"><i class="fas fa-search"></i> ค้นหา</button>
             <button class="btn-reset" (click)="onResetClick()"><i class="fas fa-sync-alt"></i> รีเซ็ท</button>
         </div>
-        <table>
+        <table *ngIf="selectedSubjectId">
             <thead>
                 <tr>
                     <th>รายการที่</th>
                     <th>รหัสนิสิต</th>
                     <th>ชื่อ-สกุล</th>
-                    <th>รายละเอียด</th>
+                    <th>จัดการ</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,11 +35,12 @@
                     <td>
                         <a class="student-profile" routerLink="/student-profile"><i class="fas fa-user"></i> ดูข้อมูล</a>
                         <button class="student-edit" (click)="UpdateStudent(student)"><i class="fas fa-edit"></i> แก้ไข</button>
+                        <button class="student-delete" (click)="deleteStudent(student.std_id)"><i class="fas fa-trash"></i> ลบ</button>
                     </td>
                 </tr>
             </tbody>
         </table>
         <br>
-        <p style="font-size: 20px;"><strong>จำนวนนักศึกษารวมทั้งหมด : </strong>{{ totalStudents }} คน</p>
+        <p *ngIf="selectedSubjectId" style="font-size: 20px;"><strong>จำนวนนักศึกษารวมทั้งหมด : </strong>{{ totalStudents }} คน</p>
     </div>
 </div>

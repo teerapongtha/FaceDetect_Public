@@ -1,1 +1,34 @@
-<p>subject-detail works!</p>
+<div class="subject-detail-container">
+    <h1>รายละเอียดของวิชา</h1>
+  
+    <div *ngIf="subject">
+      <h2>{{ subject.subject_name }} ({{ subject.subject_engname }})</h2>
+      <p><strong>รายละเอียด: </strong>{{ subject.time_start }} - {{ subject.time_end }}</p>
+      <p><strong>รหัสวิชา: </strong>{{ subject.id_subject }}</p>
+    </div>
+  
+    <div *ngIf="students.length > 0">
+      <h2>ข้อมูลนิสิตในวิชานี้</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>รายการที่</th>
+            <th>รหัสนิสิต</th>
+            <th>ชื่อ-สกุล</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ student.std_id }}</td>
+            <td>{{ student.title }}{{ student.fname }} {{ student.lname }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="students.length === 0">
+      <p>ไม่มีข้อมูลนิสิตในวิชานี้</p>
+    </div>
+  </div>
+  

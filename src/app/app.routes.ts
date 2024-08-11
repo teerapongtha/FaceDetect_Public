@@ -25,6 +25,7 @@ import { FaceRecognitionComponent } from './face-recognition/face-recognition.co
 import { RecognitionManageComponent } from './recognition-manage/recognition-manage.component';
 import { ChecklistStudentComponent } from './checklist-student/checklist-student.component';
 import { FaceDetectComponent } from './face-detect/face-detect.component';
+import { ChecklistAttendanceComponent } from './checklist-attendance/checklist-attendance.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -32,6 +33,7 @@ export const routes: Routes = [
     { 'path': 'navbar', component: NavbarComponent },
     { 'path': 'login', component: LoginComponent },
     { 'path': 'forget-password', component: ForgetPasswordComponent },
+    { 'path': 'checklist-attendance', component: ChecklistAttendanceComponent },
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },
     { 'path': 'checklist-update/:id', component: ChecklistEditComponent },
@@ -46,7 +48,7 @@ export const routes: Routes = [
     { 'path': 'report-personal', component: ReportPersonalComponent },
     { 'path': 'report-week', component: ReportWeekComponent },
     { 'path': 'subject-manage', component: SubjectManageComponent },
-    { 'path': 'subject-detail', component: SubjectDetailComponent },
+    { 'path': 'subject-detail/:subjectId', component: SubjectDetailComponent },
     { 'path': 'subject-add', component: SubjectAddComponent },
     { 'path': 'subject-update/:id', component: SubjectEditComponent },
     { 'path': 'student-manage', component: StudentManageComponent },

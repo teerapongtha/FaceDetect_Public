@@ -5,7 +5,7 @@ import { DataService } from '../service/data.service';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, formatDate } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-checklist-student',
@@ -13,83 +13,82 @@ import { CommonModule, formatDate } from '@angular/common';
   imports: [RouterLink, CommonModule, FormsModule],
   providers: [DataService],
   templateUrl: './checklist-student.component.html',
-  styleUrl: './checklist-student.component.scss'
+  styleUrls: ['./checklist-student.component.scss']
 })
 export class ChecklistStudentComponent implements OnInit {
   checklists: Checklist[] = [];
   subjects: any[] = [];
   selectedSubjectId: any = '';
   currentTime: Date = new Date();
+  user_id: any;
 
   constructor(private dataService: DataService, private http: HttpClient, private route: Router) { }
 
   ngOnInit() {
-    this.loadChecklist();
-    this.getSubjects();
+    this.getUserData();
     this.getCurrentTime();
   }
 
-  getSubjects() {
-    this.http.get<any[]>(this.dataService.apiUrl + '/subject-data').subscribe(
+  // ดึงข้อมูล user_id และวิชาที่ลงทะเบียน
+  getUserData() {
+    this.dataService.getUserData().subscribe(userData => {
+      if (userData) {
+        this.user_id = userData.std_id;
+        this.getSubjects(this.user_id); // ดึงข้อมูลวิชาที่ลงทะเบียน
+      } else {
+        console.error('ไม่พบข้อมูลผู้ใช้');
+      }
+    });
+  }
+
+  // ดึงข้อมูลวิชาที่นิสิตลงทะเบียน
+  getSubjects(std_id: any) {
+    this.http.get<any[]>(`${this.dataService.apiUrl}/subject-student-list/${std_id}`).subscribe(
       (data) => {
         this.subjects = data;
+        if (this.subjects.length === 0) {
+          this.checklists = []; // ไม่มีข้อมูลให้แสดง
+          alert('คุณยังไม่ได้ลงทะเบียนวิชาใดๆ');
+        } else {
+          this.loadChecklist(); // โหลดรายการเช็คชื่อเริ่มต้นเมื่อดึงข้อมูลวิชาเสร็จ
+        }
       },
       (error) => {
-        console.error('Error fetching subjects:', error);
+        console.error('เกิดข้อผิดพลาดในการดึงรายวิชา:', error);
       }
     );
   }
 
+  // โหลดรายการเช็คชื่อสำหรับวิชาที่เลือก
   loadChecklist() {
-    const url = this.selectedSubjectId 
-      ? `${this.dataService.apiUrl}/checklist-data/subject/${this.selectedSubjectId}`
-      : `${this.dataService.apiUrl}/checklist`;
-
+    if (!this.selectedSubjectId) {
+      this.checklists = []; // ถ้าไม่ได้เลือกวิชา ไม่โหลดข้อมูลใดๆ
+      return;
+    }
+  
+    const url = `${this.dataService.apiUrl}/checklist-data/student/${this.user_id}/subject/${this.selectedSubjectId}`;
+  
     this.http.get<Checklist[]>(url).subscribe(
       (data) => {
         this.checklists = data;
       },
       (error) => {
-        console.error('Error fetching checklists:', error);
+        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลเช็คชื่อ:', error);
+        if (error.status === 404) {
+          this.checklists = []; // ถ้าไม่มีข้อมูล
+        }
       }
     );
   }
-
+  
   onSubjectChange(event: any) {
     this.selectedSubjectId = event.target.value;
-    this.loadChecklist();
+    this.loadChecklist(); // โหลดรายการเช็คชื่อใหม่ตามวิชาที่เลือก
   }
+  
 
-  DeleteChecklist(checklist_id: number) {
-    Swal.fire({
-      title: 'คุณแน่ใจที่จะลบรายการนี้หรือไม่?',
-      text: 'การกระทำนี้ไม่สามารถยกเลิกได้!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'ใช่, ลบรายการนี้',
-      cancelButtonText: 'ยกเลิก'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.http.delete(this.dataService.apiUrl + `/checklist-delete/${checklist_id}`).subscribe(
-          () => {
-            this.loadChecklist();
-            Swal.fire(
-              'ลบรายการสำเร็จ!',
-              'รายการถูกลบแล้ว',
-              'success'
-            );
-          },
-          (error) => {
-            console.error('เกิดข้อผิดพลาดในการลบรายการ: ', error);
-          }
-        );
-      }
-    });
-  }
-
-  UpdateChecklist(checklist: Checklist) {
-    this.route.navigate(['/checklist-update', checklist.checklist_id]);
-  }
+  // ส่วนอื่นๆ ที่เกี่ยวกับการลบและแก้ไขรายการเช็คชื่อ
+  // ...
 
   getSubjectName(subject_id: any): string {
     const subject = this.subjects.find(s => s.subject_id === subject_id);

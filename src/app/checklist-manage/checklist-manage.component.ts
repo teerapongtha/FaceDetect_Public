@@ -5,7 +5,7 @@ import { DataService } from '../service/data.service';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, formatDate } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-checklist-manage',
@@ -13,24 +13,39 @@ import { CommonModule, formatDate } from '@angular/common';
   imports: [RouterLink, CommonModule, FormsModule],
   providers: [DataService],
   templateUrl: './checklist-manage.component.html',
-  styleUrl: './checklist-manage.component.scss'
+  styleUrls: ['./checklist-manage.component.scss']
 })
 export class ChecklistManageComponent implements OnInit {
   checklists: Checklist[] = [];
   subjects: any[] = [];
   selectedSubjectId: any = '';
   currentTime: Date = new Date();
+  user_id!: number;
 
   constructor(private dataService: DataService, private http: HttpClient, private route: Router) { }
 
   ngOnInit() {
-    this.loadChecklist();
-    this.getSubjects();
+    this.loadUserData();
     this.getCurrentTime();
   }
 
+  loadUserData() {
+    this.dataService.getUserData().subscribe(userData => {
+      if (userData) {
+        this.user_id = userData.teacher_id; 
+        if (this.user_id) {
+          this.getSubjects();
+        } else {
+          console.error('ไม่พบ user_id ในข้อมูลผู้ใช้');
+        }
+      } else {
+        console.error('ไม่พบข้อมูลผู้ใช้');
+      }
+    });
+  }
+
   getSubjects() {
-    this.http.get<any[]>(this.dataService.apiUrl + '/subject-data').subscribe(
+    this.http.get<any[]>(`${this.dataService.apiUrl}/subjects/${this.user_id}`).subscribe(
       (data) => {
         this.subjects = data;
       },
@@ -41,9 +56,13 @@ export class ChecklistManageComponent implements OnInit {
   }
 
   loadChecklist() {
-    const url = this.selectedSubjectId 
-      ? `${this.dataService.apiUrl}/checklist-data/subject/${this.selectedSubjectId}`
-      : `${this.dataService.apiUrl}/checklist`;
+    // ถ้าไม่ได้เลือกวิชา, ไม่ต้องโหลดข้อมูล
+    if (!this.selectedSubjectId) {
+      this.checklists = [];
+      return;
+    }
+    
+    const url = `${this.dataService.apiUrl}/checklist-data/subject/${this.selectedSubjectId}`;
 
     this.http.get<Checklist[]>(url).subscribe(
       (data) => {

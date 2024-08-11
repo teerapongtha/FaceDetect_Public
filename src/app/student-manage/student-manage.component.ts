@@ -5,6 +5,7 @@ import { DataService } from '../service/data.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-student-manage',
@@ -25,19 +26,25 @@ export class StudentManageComponent implements OnInit {
   constructor(private dataService: DataService, private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
-    this.loadData();
     this.getSubjects();
   }
 
   getSubjects() {
-    this.http.get<any[]>(this.dataService.apiUrl + '/subject-data').subscribe(
-      (data) => {
-        this.subjects = data;
-      },
-      (error) => {
-        console.error('Error fetching subjects:', error);
+    this.dataService.getUserData().subscribe(userData => {
+      if (userData) {
+        const user_id = userData.teacher_id;
+        this.http.get<any[]>(`${this.dataService.apiUrl}/subjects/${user_id}`).subscribe(
+          (data) => {
+            this.subjects = data;
+          },
+          (error) => {
+            console.error('Error fetching subjects:', error);
+          }
+        );
+      } else {
+        console.error('ไม่พบข้อมูลผู้ใช้');
       }
-    );
+    });
   }
 
   onSubjectChange(event: any) {
@@ -50,15 +57,18 @@ export class StudentManageComponent implements OnInit {
   }
 
   loadData() {
-    let url = this.dataService.apiUrl + '/student-data';
-    
-    if (this.selectedSubjectId) {
-      url += `/subject/${this.selectedSubjectId}`;
+    if (!this.selectedSubjectId) {
+      this.students = [];
+      this.filteredStudents = [];
+      this.totalStudents = 0;
+      return;
     }
+
+    let url = `${this.dataService.apiUrl}/student-data/subject/${this.selectedSubjectId}`;
     
     if (this.searchQuery) {
       const encodedQuery = encodeURIComponent(this.searchQuery);
-      url += this.selectedSubjectId ? `&query=${encodedQuery}` : `?query=${encodedQuery}`;
+      url += `?query=${encodedQuery}`;
     }
 
     this.http.get<Student[]>(url).subscribe(
@@ -88,11 +98,46 @@ export class StudentManageComponent implements OnInit {
 
   onResetClick() {
     this.searchQuery = '';
-    this.selectedSubjectId = '';
     this.loadData();
   }
 
   UpdateStudent(student: any) {
     this.router.navigate(['/student-update', student.std_id]);
   }
+
+  deleteStudent(std_id: any) {
+    Swal.fire({
+      title: 'คุณแน่ใจหรือไม่?',
+      text: "คุณต้องการลบข้อมูลนิสิตนี้หรือไม่?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ลบ',
+      cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.http.delete(`${this.dataService.apiUrl}/student-delete/${std_id}`).subscribe(
+          () => {
+            // รีโหลดข้อมูลหลังจากลบเสร็จ
+            this.loadData();
+            Swal.fire(
+              'ลบแล้ว!',
+              'ข้อมูลนิสิตถูกลบแล้ว.',
+              'success'
+            );
+          },
+          (error) => {
+            console.error('Error deleting student:', error);
+            Swal.fire(
+              'ข้อผิดพลาด!',
+              'ไม่สามารถลบข้อมูลนิสิตได้.',
+              'error'
+            );
+          }
+        );
+      }
+    });
+  }
+  
 }
