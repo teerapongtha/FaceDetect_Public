@@ -1,20 +1,26 @@
-<div class="contain-login">
-    <div class="text-login">
-        <h1>เข้าสู่ระบบ</h1>
-        <form >
-            <label for="email" style="font-size: 24px;">Email:</label><br>
-            <input type="text" id="email" name="email" placeholder="ระบุอีเมล" #email required><br>
-
-            <label for="password" style="font-size: 24px;">Password :</label><br>
-            <input type="password" id="password" name="password" placeholder="ระบุรหัสผ่าน" #password required><br><br>
-
-            <button class="btn-submit" type="submit" (click)="login(email.value, password.value)">
-                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-            </button>
-        </form>
-        <a routerLink="/forget-password"><button class="btn-forgotpsw">ลืมรหัสผ่าน</button></a>
-    </div>
-    <div class="image-login">
-        <img src="../assets/home-img.png" class="img-home">
+<div class="container py-5 custom-border-container">
+    <div class="row justify-content-center align-items-center text-center">
+        <div class="col-md-6 d-flex align-items-center">
+            <div class="text-login w-100">
+                <h1 class="display-4">เข้าสู่ระบบ</h1>
+                <form>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="text" id="email" name="email" class="form-control" placeholder="ระบุอีเมล" #email required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="ระบุรหัสผ่าน" #password required>
+                    </div>
+                    <button class="btn btn-primary btn-submit" type="submit" (click)="login(email.value, password.value)">
+                        <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+                    </button>
+                </form>
+                <a href="/forget-password" class="btn btn-secondary btn-forgotpsw">ลืมรหัสผ่าน</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <img src="../assets/home-img.png" class="img-fluid img-home" alt="Login Image">
+        </div>
     </div>
 </div>
