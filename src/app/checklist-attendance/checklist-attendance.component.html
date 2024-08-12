@@ -1,14 +1,18 @@
 <div class="Detection-container">
     <h1>ทำการเช็คชื่อเพื่อเข้าเรียน</h1>
-    <p>Face-Detection!</p>
-    
+    <div class="current-time">
+        <strong>เวลาและวันที่ปัจจุบัน</strong><br>
+        <strong>วันที่ : </strong>{{ date }}<br>
+        <strong>เวลา : </strong>{{ currentTime | date: 'HH:mm:ss' }}
+    </div>
+
     <div class="video-container">
       <video #videoElement width="720" height="560" autoplay muted></video>
       <canvas #canvasElement></canvas>
     </div>
-  
+
     <button (click)="verifyFace()">ตรวจสอบใบหน้า</button>
-    
+
     <div *ngIf="verificationResult" class="verification-result">
       <h2>ผลการตรวจสอบ</h2>
       <p><strong>ชื่อ:</strong> {{ verificationResult.fname || 'ไม่พบชื่อ' }} {{ verificationResult.lname || 'ไม่พบนามสกุล' }}</p>

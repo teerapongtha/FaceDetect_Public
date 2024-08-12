@@ -7,4 +7,5 @@ export interface Checklist {
     time_end: string;
     teacher_id: number;
     subject_id: number;
+    status?: string; // Optional status field
 }

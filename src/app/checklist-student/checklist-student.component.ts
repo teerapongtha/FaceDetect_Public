@@ -81,6 +81,7 @@ export class ChecklistStudentComponent implements OnInit {
     );
   }
   
+  
   onSubjectChange(event: any) {
     this.selectedSubjectId = event.target.value;
     this.loadChecklist(); // โหลดรายการเช็คชื่อใหม่ตามวิชาที่เลือก

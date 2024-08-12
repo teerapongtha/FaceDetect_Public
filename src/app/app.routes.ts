@@ -26,6 +26,7 @@ import { RecognitionManageComponent } from './recognition-manage/recognition-man
 import { ChecklistStudentComponent } from './checklist-student/checklist-student.component';
 import { FaceDetectComponent } from './face-detect/face-detect.component';
 import { ChecklistAttendanceComponent } from './checklist-attendance/checklist-attendance.component';
+import { AttendanceRecordComponent } from './attendance-record/attendance-record.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -33,6 +34,7 @@ export const routes: Routes = [
     { 'path': 'navbar', component: NavbarComponent },
     { 'path': 'login', component: LoginComponent },
     { 'path': 'forget-password', component: ForgetPasswordComponent },
+    {'path' : 'attendance-record/:id', component: AttendanceRecordComponent},
     { 'path': 'checklist-attendance/:id', component: ChecklistAttendanceComponent },
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },

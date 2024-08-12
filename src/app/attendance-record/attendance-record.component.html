@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>หัวข้อ : {{ checklist }}</h1>
+  <h2>รายละเอียดการเช็คชื่อ</h2>
+  
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาชื่อหรือรหัสนิสิต" />
+  </div>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th>รหัสนิสิต</th>
+        <th>ชื่อ-นามสกุล</th>
+        <th>สถานะ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let detail of filteredDetails()">
+        <td>{{ detail.std_id }}</td>
+        <td>{{ detail.std_name }}</td>
+        <td>{{ detail.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn-back" (click)="goBack()">
+    <i class="fa fa-arrow-left"></i> ย้อนกลับ
+  </button>
+</div>

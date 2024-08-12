@@ -3,7 +3,7 @@
   <div class="dropdown">
     <label for="subject-dropdown">เลือกรายวิชา:</label>
     <select id="subject-dropdown" name="subject_id" [(ngModel)]="selectedSubjectId" (change)="onSubjectChange($event)">
-      <option value="" selected>-- กรุณาเลือกรายวิชา --</option>
+      <option value="" disabled selected hidden>-- กรุณาเลือกรายวิชา --</option>
       <option *ngFor="let subject of subjects" [value]="subject.subject_id">
         {{ subject.subject_name }} ({{ subject.subject_engname }})
       </option>
@@ -24,12 +24,19 @@
         <strong>เวลาสิ้นสุดเช็คชื่อ : </strong>{{ checklist.time_end }}<br>
         <strong>เวลาปัจจุบัน : </strong>{{ currentTime | date: 'HH:mm:ss' }}<br>
         <p><strong>วันที่ : </strong>{{ formatDateThai(checklist.date) }}</p>
-        <a routerLink="/attendance-record"><button class="btn-detail"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button></a>
-        <a [routerLink]="['/checklist-attendance', checklist.checklist_id]">
-          <button class="btn-edit"><i class="far fa-edit"></i> ทำการเช็คชื่อ
-          </button>
-        </a>
 
+        <!-- Show status if already attended -->
+        <p *ngIf="checklist.status === 'มาเรียน'"><strong>สถานะ: มาเรียน</strong></p>
+
+        <!-- Show buttons based on status -->
+        <ng-container *ngIf="checklist.status !== 'มาเรียน'">
+          <!-- <a routerLink="/attendance-record">
+            <button class="btn-detail"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+          </a> -->
+          <a [routerLink]="['/checklist-attendance', checklist.checklist_id]">
+            <button class="btn-edit"><i class="far fa-edit"></i> ทำการเช็คชื่อ</button>
+          </a>
+        </ng-container>
       </div>
     </li>
   </ul>

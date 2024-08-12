@@ -23,18 +23,32 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
   verificationResult: any = null;
   attendance_id: number | null = null;
   checklistId: number | null = null;
+  
+  date: string;
+  currentTime: Date = new Date();
 
   constructor(
     private dataService: DataService,
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute // Inject ActivatedRoute
-  ) {}
+    private route: ActivatedRoute
+  ) {
+    // Initialize date and time
+    this.date = new Date().toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok' });
+  }
 
-  async ngAfterViewInit() {
-    await this.loadFaceAPIModels();
+  ngAfterViewInit() {
+    this.updateDateTime();
+    this.loadFaceAPIModels();
     this.startVideo();
     this.fetchImageData();
+  }
+
+  updateDateTime() {
+    setInterval(() => {
+      this.currentTime = new Date();
+      this.date = this.currentTime.toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok' });
+    }, 1000); // Update every second
   }
 
   async loadFaceAPIModels() {
@@ -94,9 +108,7 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
 
       if (faceDescriptor.length === savedDescriptor.length) {
         const distance = faceapi.euclideanDistance(faceDescriptor, savedDescriptor);
-
         console.log(`ระยะทางไปยัง ${userData.fname} ${userData.lname}: ${distance}`);
-
         if (distance <= maxDescriptorDistance) {
           if (!bestMatch || distance < bestMatch.distance) {
             bestMatch = { userData, distance };
@@ -140,21 +152,24 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
           const fname = userData?.fname ?? 'ไม่ทราบ';
           const lname = userData?.lname ?? 'ไม่ทราบ';
   
+          const currentTime = new Date();
+          const timeDisplay = currentTime.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
+  
           this.verificationResult = {
             fname,
             lname,
             distance: distance.toFixed(2),
             match: distance <= 0.6,
-            time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+            time: timeDisplay // Display format
           };
   
-          // Capture image from the video
           const imageBlob = await this.captureImageFromVideo(video);
           const formData = new FormData();
           formData.append('img_attendance', imageBlob, 'image.jpg');
-          formData.append('std_id', userData.std_id.toString()); // Ensure correct key
-          formData.append('status', 'มาเรียน'); // Ensure correct key
-          formData.append('time_attendance', this.verificationResult.time); // Ensure correct key
+          formData.append('std_id', userData.std_id.toString());
+          formData.append('status', 'มาเรียน');
+          formData.append('date_attendance', currentTime.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+          formData.append('time_attendance', currentTime.toTimeString().split(' ')[0]); // Format as HH:MM:SS
   
           const saveResponse: any = await this.http.post(`${this.dataService.apiUrl}/checklist-attendance/${this.checklistId}`, formData).toPromise();
           this.attendance_id = saveResponse?.attendance_id || null;
@@ -165,7 +180,11 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
             icon: 'success',
             confirmButtonText: 'ตกลง'
           }).then(() => {
-            this.router.navigate(['/checklist-manage']);
+            this.router.navigate(['/checklist-student']).then(() => {
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            });
           });
         } else {
           this.verificationResult = { fname: 'ไม่ทราบ', lname: 'ไม่ทราบ', distance: 'N/A', match: false, time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) };
@@ -183,7 +202,6 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
       });
     }
   }
-  
   
 
   captureImageFromVideo(video: HTMLVideoElement): Promise<Blob> {
@@ -207,9 +225,17 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
     });
   }
 
+  getCurrentTime() {
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
+  }
+  
   ngOnInit() {
+    this.getCurrentTime(); // Start updating time
     this.route.paramMap.subscribe(params => {
       this.checklistId = +params.get('id')!;
     });
   }
+  
 }
