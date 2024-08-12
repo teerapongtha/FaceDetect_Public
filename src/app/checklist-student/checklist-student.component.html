@@ -25,7 +25,11 @@
         <strong>เวลาปัจจุบัน : </strong>{{ currentTime | date: 'HH:mm:ss' }}<br>
         <p><strong>วันที่ : </strong>{{ formatDateThai(checklist.date) }}</p>
         <a routerLink="/attendance-record"><button class="btn-detail"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button></a>
-        <button class="btn-edit"><a  routerLink="/checklist-attendance"><i class="far fa-edit"></i> ทำการเช็คชื่อ</a></button>
+        <a [routerLink]="['/checklist-attendance', checklist.checklist_id]">
+          <button class="btn-edit"><i class="far fa-edit"></i> ทำการเช็คชื่อ
+          </button>
+        </a>
+
       </div>
     </li>
   </ul>

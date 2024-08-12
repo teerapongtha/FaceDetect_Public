@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as faceapi from 'face-api.js';
 import { DataService } from '../service/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-checklist-attendance',
@@ -20,11 +21,14 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
 
   imgStdData: any[] = [];
   verificationResult: any = null;
+  attendance_id: number | null = null;
+  checklistId: number | null = null;
 
   constructor(
     private dataService: DataService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute // Inject ActivatedRoute
   ) {}
 
   async ngAfterViewInit() {
@@ -40,7 +44,7 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
       faceapi.nets.faceRecognitionNet.loadFromUri('assets/models'),
       faceapi.nets.faceExpressionNet.loadFromUri('assets/models')
     ]);
-    console.log('โหลดโมเดล Face API เสร็จสิ้น');
+    console.log('โมเดล Face API โหลดเรียบร้อยแล้ว');
   }
 
   startVideo() {
@@ -49,9 +53,10 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
         video.srcObject = stream;
-        console.log('เริ่มวิดีโอ');
+        video.play();
+        console.log('กล้องถ่ายรูปเริ่มทำงาน');
       })
-      .catch(err => console.error('เกิดข้อผิดพลาดในการเข้าถึงกล้อง:', err));
+      .catch(err => console.error('ข้อผิดพลาดในการเข้าถึงกล้อง:', err));
 
     video.addEventListener('play', () => {
       const canvas = this.canvasElement.nativeElement;
@@ -64,9 +69,6 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
           .withFaceDescriptors();
 
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        // No drawing on canvas
-        // Instead, you may choose to handle detection results here if needed
-        // Example: console.log(detections);
       }, 100);
     });
   }
@@ -75,71 +77,139 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
     this.http.get<any[]>(`${this.dataService.apiUrl}/face-detect-img`).subscribe(
       (data: any[]) => {
         this.imgStdData = data;
-        console.log('ดึงข้อมูลรูปภาพสำเร็จ');
+        console.log('ดึงข้อมูลภาพเรียบร้อยแล้ว');
       },
       (error) => {
-        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลรูปภาพ:', error);
+        console.error('ข้อผิดพลาดในการดึงข้อมูลภาพ:', error);
       }
     );
   }
 
   findMatchingUser(faceDescriptor: any) {
-
     const maxDescriptorDistance = 0.6;
     let bestMatch: any = null;
-  
+
     this.imgStdData.forEach((userData) => {
       const savedDescriptor = JSON.parse(userData.extract_feature);
-  
+
       if (faceDescriptor.length === savedDescriptor.length) {
         const distance = faceapi.euclideanDistance(faceDescriptor, savedDescriptor);
-  
+
         console.log(`ระยะทางไปยัง ${userData.fname} ${userData.lname}: ${distance}`);
-  
+
         if (distance <= maxDescriptorDistance) {
           if (!bestMatch || distance < bestMatch.distance) {
             bestMatch = { userData, distance };
           }
         }
       } else {
-        console.warn('ความยาวของ descriptors ไม่ตรงกัน');
+        console.warn('ความยาวของ Descriptor ไม่ตรงกัน');
       }
     });
-  
+
     return bestMatch ? bestMatch : null;
   }
-  
+
   async verifyFace() {
+    if (this.checklistId === undefined || this.checklistId === null) {
+      Swal.fire({
+        title: 'ข้อผิดพลาด',
+        text: 'รหัสตรวจสอบไม่ถูกต้อง',
+        icon: 'error',
+        confirmButtonText: 'ตกลง'
+      });
+      return;
+    }
+  
     const video = this.videoElement.nativeElement;
     const canvas = this.canvasElement.nativeElement;
   
-    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks()
-      .withFaceDescriptors();
+    try {
+      const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptors();
   
-    const resizedDetections = faceapi.resizeResults(detections, faceapi.matchDimensions(canvas, { width: video.width, height: video.height }));
-    const faceDescriptor = resizedDetections.length > 0 ? resizedDetections[0].descriptor : null;
+      const resizedDetections = faceapi.resizeResults(detections, faceapi.matchDimensions(canvas, { width: video.width, height: video.height }));
+      const faceDescriptor = resizedDetections.length > 0 ? resizedDetections[0].descriptor : null;
   
-    if (faceDescriptor) {
-      const matchingUser = this.findMatchingUser(faceDescriptor);
-      if (matchingUser) {
-        const userData = matchingUser.userData;
-        const distance = matchingUser.distance;
-        const fname = userData?.fname ?? 'ไม่พบชื่อ';
-        const lname = userData?.lname ?? 'ไม่พบนามสกุล';
+      if (faceDescriptor) {
+        const matchingUser = this.findMatchingUser(faceDescriptor);
+        if (matchingUser) {
+          const userData = matchingUser.userData;
+          const distance = matchingUser.distance;
+          const fname = userData?.fname ?? 'ไม่ทราบ';
+          const lname = userData?.lname ?? 'ไม่ทราบ';
   
-        this.verificationResult = {
-          fname,
-          lname,
-          distance: distance.toFixed(2),
-          match: distance <= 0.6 // Ensure this threshold matches your `maxDescriptorDistance`
-        };
+          this.verificationResult = {
+            fname,
+            lname,
+            distance: distance.toFixed(2),
+            match: distance <= 0.6,
+            time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+          };
+  
+          // Capture image from the video
+          const imageBlob = await this.captureImageFromVideo(video);
+          const formData = new FormData();
+          formData.append('img_attendance', imageBlob, 'image.jpg');
+          formData.append('std_id', userData.std_id.toString()); // Ensure correct key
+          formData.append('status', 'มาเรียน'); // Ensure correct key
+          formData.append('time_attendance', this.verificationResult.time); // Ensure correct key
+  
+          const saveResponse: any = await this.http.post(`${this.dataService.apiUrl}/checklist-attendance/${this.checklistId}`, formData).toPromise();
+          this.attendance_id = saveResponse?.attendance_id || null;
+  
+          Swal.fire({
+            title: 'การตรวจสอบเสร็จสมบูรณ์',
+            text: `ชื่อ: ${this.verificationResult.fname}\nนามสกุล: ${this.verificationResult.lname}\nสถานะ: ${this.verificationResult.match ? 'มาเรียน' : 'ไม่มาเรียน'}\nเวลา: ${this.verificationResult.time}`,
+            icon: 'success',
+            confirmButtonText: 'ตกลง'
+          }).then(() => {
+            this.router.navigate(['/checklist-manage']);
+          });
+        } else {
+          this.verificationResult = { fname: 'ไม่ทราบ', lname: 'ไม่ทราบ', distance: 'N/A', match: false, time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) };
+        }
       } else {
-        this.verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
+        this.verificationResult = { fname: 'ไม่ทราบ', lname: 'ไม่ทราบ', distance: 'N/A', match: false, time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) };
       }
-    } else {
-      this.verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
+    } catch (error) {
+      console.error('การตรวจสอบใบหน้าล้มเหลว:', error);
+      Swal.fire({
+        title: 'ข้อผิดพลาด',
+        text: 'การตรวจสอบใบหน้าล้มเหลว',
+        icon: 'error',
+        confirmButtonText: 'ตกลง'
+      });
     }
   }
   
+  
+
+  captureImageFromVideo(video: HTMLVideoElement): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error('Failed to capture image from video.'));
+          }
+        }, 'image/jpeg');
+      } else {
+        reject(new Error('Failed to get canvas context.'));
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.checklistId = +params.get('id')!;
+    });
+  }
 }

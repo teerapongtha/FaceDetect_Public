@@ -33,7 +33,7 @@ export const routes: Routes = [
     { 'path': 'navbar', component: NavbarComponent },
     { 'path': 'login', component: LoginComponent },
     { 'path': 'forget-password', component: ForgetPasswordComponent },
-    { 'path': 'checklist-attendance', component: ChecklistAttendanceComponent },
+    { 'path': 'checklist-attendance/:id', component: ChecklistAttendanceComponent },
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },
     { 'path': 'checklist-update/:id', component: ChecklistEditComponent },
