@@ -17,10 +17,13 @@ import { CommonModule } from '@angular/common';
 })
 export class ChecklistStudentComponent implements OnInit {
   checklists: Checklist[] = [];
+  filteredChecklists: Checklist[] = [];
   subjects: any[] = [];
   selectedSubjectId: any = '';
   currentTime: Date = new Date();
   user_id: any;
+  searchTitle: string = '';
+  searchDate: string = '';
 
   constructor(private dataService: DataService, private http: HttpClient, private route: Router) { }
 
@@ -29,28 +32,28 @@ export class ChecklistStudentComponent implements OnInit {
     this.getCurrentTime();
   }
 
-  // ดึงข้อมูล user_id และวิชาที่ลงทะเบียน
+  // Get user data and subjects
   getUserData() {
     this.dataService.getUserData().subscribe(userData => {
       if (userData) {
         this.user_id = userData.std_id;
-        this.getSubjects(this.user_id); // ดึงข้อมูลวิชาที่ลงทะเบียน
+        this.getSubjects(this.user_id);
       } else {
         console.error('ไม่พบข้อมูลผู้ใช้');
       }
     });
   }
 
-  // ดึงข้อมูลวิชาที่นิสิตลงทะเบียน
+  // Get subjects for the student
   getSubjects(std_id: any) {
     this.http.get<any[]>(`${this.dataService.apiUrl}/subject-student-list/${std_id}`).subscribe(
       (data) => {
         this.subjects = data;
         if (this.subjects.length === 0) {
-          this.checklists = []; // ไม่มีข้อมูลให้แสดง
+          this.checklists = [];
           alert('คุณยังไม่ได้ลงทะเบียนวิชาใดๆ');
         } else {
-          this.loadChecklist(); // โหลดรายการเช็คชื่อเริ่มต้นเมื่อดึงข้อมูลวิชาเสร็จ
+          this.loadChecklist();
         }
       },
       (error) => {
@@ -59,43 +62,49 @@ export class ChecklistStudentComponent implements OnInit {
     );
   }
 
-  // โหลดรายการเช็คชื่อสำหรับวิชาที่เลือก
+  // Load checklists based on the selected subject
   loadChecklist() {
     if (!this.selectedSubjectId) {
-      this.checklists = []; // ถ้าไม่ได้เลือกวิชา ไม่โหลดข้อมูลใดๆ
+      this.checklists = [];
+      this.filteredChecklists = [];
       return;
     }
-  
+
     const url = `${this.dataService.apiUrl}/checklist-data/student/${this.user_id}/subject/${this.selectedSubjectId}`;
-  
+
     this.http.get<Checklist[]>(url).subscribe(
       (data) => {
         this.checklists = data;
+        this.applySearch(); // Apply search after loading checklists
       },
       (error) => {
         console.error('เกิดข้อผิดพลาดในการดึงข้อมูลเช็คชื่อ:', error);
         if (error.status === 404) {
-          this.checklists = []; // ถ้าไม่มีข้อมูล
+          this.checklists = [];
+          this.filteredChecklists = [];
         }
       }
     );
   }
-  
-  
+
+  // Handle subject change
   onSubjectChange(event: any) {
     this.selectedSubjectId = event.target.value;
-    this.loadChecklist(); // โหลดรายการเช็คชื่อใหม่ตามวิชาที่เลือก
+    this.loadChecklist();
   }
-  
 
-  // ส่วนอื่นๆ ที่เกี่ยวกับการลบและแก้ไขรายการเช็คชื่อ
-  // ...
+  // Apply search filter
+  searchChecklist() {
+    this.applySearch();
+  }
 
+  // Get subject name based on subject_id
   getSubjectName(subject_id: any): string {
     const subject = this.subjects.find(s => s.subject_id === subject_id);
     return subject ? subject.subject_name : '';
   }
 
+  // Format date to Thai format
   formatDateThai(date: string): string {
     const months = [
       'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
@@ -107,9 +116,26 @@ export class ChecklistStudentComponent implements OnInit {
     return `${day} ${thaiMonth} ${thaiYear}`;
   }
 
+  // Update current time every second
   getCurrentTime() {
     setInterval(() => {
       this.currentTime = new Date();
     }, 1000);
+  }
+
+  // Apply search filter
+  applySearch() {
+    this.filteredChecklists = this.checklists.filter(checklist => {
+      const matchesTitle = checklist.title.toLowerCase().includes(this.searchTitle.toLowerCase());
+      const matchesDate = this.searchDate ? checklist.date === this.searchDate : true;
+      return matchesTitle && matchesDate;
+    });
+  }
+
+  // Reset search filters
+  resetSearch() {
+    this.searchTitle = '';
+    this.searchDate = '';
+    this.applySearch();
   }
 }

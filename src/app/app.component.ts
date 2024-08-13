@@ -30,6 +30,8 @@ import { RecognitionManageComponent } from './recognition-manage/recognition-man
 import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
 import { ChecklistStudentComponent } from './checklist-student/checklist-student.component';
 import { FaceDetectComponent } from './face-detect/face-detect.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 export const MY_FORMATS = {
   parse: {
@@ -51,6 +53,7 @@ export const MY_FORMATS = {
     RouterOutlet,
     HttpClientModule,
     FormsModule,
+    NgxPaginationModule,
     NavbarComponent,
     HomePageComponent,
     LoginComponent,
@@ -76,6 +79,7 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     MatInputModule,
     MatSelectModule,
+    NgxMaterialTimepickerModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'th-TH' },

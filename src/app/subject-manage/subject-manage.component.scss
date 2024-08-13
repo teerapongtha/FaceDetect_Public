@@ -1,95 +1,28 @@
-/* เพิ่มสไตล์ของรายการแสดงข้อมูล */
+.btn-custom-height {
+    height: 38px; /* Adjust to match input height */
+    line-height: 1.5; /* Adjust to center text vertically */
+    align-items: center;
+    padding: 0 0.75rem; /* Adjust horizontal padding */
+  }
+  
+  .btn-group .btn {
+    margin-right: 0.5rem; /* Adjust as needed for spacing */
+    border-radius: 0.25rem;
+  }
+  
+  .btn {
+    border-radius: 0.25rem; /* Rounded corners for buttons */
+  }
 
-.subject {
-    list-style-type: none;
-    padding: 0;
-}
-
-.subject-item {
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #45a049;
-}
-
-h2 {
-    margin-top: 0;
-}
-
-.btn {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: gray;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-.btn-detail {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #45a049;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    border: none;
-
-}
-
-.btn-edit {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #777777;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    /* ลบ border */
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
-}
-
-.btn-delete {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: brown;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    /* ลบ border */
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
-}
-
-.btn-add {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #0056b3;
-    /* เปลี่ยนสีพื้นหลัง */
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    transition: background-color 0.3s;
-    cursor: pointer;
-    margin-left: 20px;
-}
-
-.btn-add:hover {
-    background-color: #006ce0;
-    /* เปลี่ยนสีพื้นหลังเมื่อโฮเวอร์ */
-}
-.detail{
-    font-size: 20px;
-}
+  /* Ensure buttons align correctly in responsive view */
+  @media (max-width: 767.98px) {
+    .btn-group {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-group .btn {
+      margin-bottom: 0.5rem; /* Ensure buttons have some space below them */
+    }
+  }
+  

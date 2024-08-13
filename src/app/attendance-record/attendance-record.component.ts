@@ -4,11 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { DataService } from '../service/data.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination'; // Import module
 
 @Component({
   selector: 'app-attendance-record',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule],
   providers: [DataService],
   templateUrl: './attendance-record.component.html',
   styleUrls: ['./attendance-record.component.scss']
@@ -18,6 +19,7 @@ export class AttendanceRecordComponent implements OnInit {
   attendanceDetails: any[] = [];
   checklistId: any;
   searchText: string = '';
+  p: number = 1; // ตัวแปรสำหรับการแบ่งหน้า
 
   constructor(
     private route: ActivatedRoute,
@@ -54,9 +56,13 @@ export class AttendanceRecordComponent implements OnInit {
       (detail.std_name ? detail.std_name.toLowerCase().includes(searchText) : false)
     );
   }
-  
+
+  resetSearch() {
+    this.searchText = '';
+    this.p = 1;
+  }
 
   goBack() {
-    this.router.navigate(['/checklist-manage']); // Adjust as needed
+    this.router.navigate(['/checklist-manage']);
   }
 }

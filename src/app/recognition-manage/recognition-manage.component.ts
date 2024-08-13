@@ -91,4 +91,39 @@ export class RecognitionManageComponent implements OnInit {
       }
     });
   }
+
+  deleteAllImages(): void {
+    Swal.fire({
+      title: 'คุณแน่ใจหรือไม่?',
+      text: 'คุณต้องการลบรูปภาพทั้งหมดหรือไม่?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'ใช่, ลบทั้งหมด!',
+      cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+      if (result.isConfirmed && this.userId) {
+        this.http.delete(`${this.dataService.apiUrl}/face-detect-img-delete-all/${this.userId}`)
+          .subscribe(
+            () => {
+              this.userDataStudent = [];
+              Swal.fire(
+                'ลบเรียบร้อย!',
+                'รูปภาพทั้งหมดถูกลบแล้ว',
+                'success'
+              );
+            },
+            error => {
+              console.error('Error deleting all images:', error);
+              Swal.fire(
+                'เกิดข้อผิดพลาด!',
+                'ไม่สามารถลบรูปภาพทั้งหมดได้',
+                'error'
+              );
+            }
+          );
+      }
+    });
+  }
 }

@@ -17,8 +17,11 @@ import { CommonModule } from '@angular/common';
 })
 export class ChecklistManageComponent implements OnInit {
   checklists: Checklist[] = [];
+  filteredChecklists: Checklist[] = [];
   subjects: any[] = [];
   selectedSubjectId: any = '';
+  searchTitle: string = '';
+  searchDate: string = '';
   currentTime: Date = new Date();
   user_id!: number;
 
@@ -59,6 +62,7 @@ export class ChecklistManageComponent implements OnInit {
     // ถ้าไม่ได้เลือกวิชา, ไม่ต้องโหลดข้อมูล
     if (!this.selectedSubjectId) {
       this.checklists = [];
+      this.filteredChecklists = [];
       return;
     }
     
@@ -67,6 +71,7 @@ export class ChecklistManageComponent implements OnInit {
     this.http.get<Checklist[]>(url).subscribe(
       (data) => {
         this.checklists = data;
+        this.filterChecklists();
       },
       (error) => {
         console.error('Error fetching checklists:', error);
@@ -74,9 +79,21 @@ export class ChecklistManageComponent implements OnInit {
     );
   }
 
+  filterChecklists() {
+    this.filteredChecklists = this.checklists.filter(checklist => {
+      const matchesTitle = this.searchTitle ? checklist.title.toLowerCase().includes(this.searchTitle.toLowerCase()) : true;
+      const matchesDate = this.searchDate ? checklist.date === this.searchDate : true;
+      return matchesTitle && matchesDate;
+    });
+  }
+
   onSubjectChange(event: any) {
     this.selectedSubjectId = event.target.value;
     this.loadChecklist();
+  }
+
+  searchChecklist() {
+    this.filterChecklists();
   }
 
   DeleteChecklist(checklist_id: number) {
@@ -131,4 +148,11 @@ export class ChecklistManageComponent implements OnInit {
       this.currentTime = new Date();
     }, 1000);
   }
+
+  resetSearch() {
+    this.searchTitle = '';
+    this.searchDate = '';
+    this.filterChecklists();
+  }
+  
 }

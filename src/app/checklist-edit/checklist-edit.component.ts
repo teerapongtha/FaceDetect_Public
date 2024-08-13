@@ -8,11 +8,14 @@ import { CommonModule } from '@angular/common';
 import { DateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-checklist-edit',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [RouterLink, CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule,MatFormFieldModule,MatInputModule],
   providers: [DataService],
   templateUrl: './checklist-edit.component.html',
   styleUrls: ['./checklist-edit.component.scss']

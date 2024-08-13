@@ -5,6 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as faceapi from 'face-api.js';
 import { DataService } from '../service/data.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-face-detect',
@@ -120,6 +122,8 @@ export class FaceDetectComponent implements AfterViewInit {
     const resizedDetections = faceapi.resizeResults(detections, faceapi.matchDimensions(canvas, { width: video.width, height: video.height }));
     const faceDescriptor = resizedDetections.length > 0 ? resizedDetections[0].descriptor : null;
   
+    let verificationResult;
+  
     if (faceDescriptor) {
       const matchingUser = this.findMatchingUser(faceDescriptor);
       if (matchingUser) {
@@ -128,18 +132,38 @@ export class FaceDetectComponent implements AfterViewInit {
         const fname = userData?.fname ?? 'ไม่พบชื่อ';
         const lname = userData?.lname ?? 'ไม่พบนามสกุล';
   
-        this.verificationResult = {
+        verificationResult = {
           fname,
           lname,
           distance: distance.toFixed(2),
           match: distance <= 0.6 // Ensure this threshold matches your `maxDescriptorDistance`
         };
       } else {
-        this.verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
+        verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
       }
     } else {
-      this.verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
+      verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
     }
+  
+    // Display result using SweetAlert2
+    Swal.fire({
+      title: 'ผลการตรวจสอบ',
+      html: `
+        <p><strong>ชื่อ:</strong> ${verificationResult.fname}</p>
+        <p><strong>นามสกุล:</strong> ${verificationResult.lname}</p>
+        <p><strong>ระยะทาง:</strong> ${verificationResult.distance}</p>
+        <p><strong>ผลลัพธ์:</strong> ${verificationResult.match ? 'ตรง' : 'ไม่ตรง'}</p>
+      `,
+      icon: verificationResult.match ? 'success' : 'error',
+      confirmButtonText: 'ตกลง'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/recognition-manage']);
+      }
+    });
   }
   
+  goBack() {
+    this.router.navigate(['/recognition-manage']); // Update with your actual route
+  }
 }

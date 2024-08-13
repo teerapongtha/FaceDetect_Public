@@ -156,4 +156,7 @@ export class FaceRecognitionComponent implements AfterViewInit {
     }
   }
   
+  goBack() {
+    this.router.navigate(['/recognition-manage']); // Update with your actual route
+  }
 }

@@ -63,7 +63,8 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
 
   startVideo() {
     const video = this.videoElement.nativeElement;
-
+    const canvas = this.canvasElement.nativeElement;
+  
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
         video.srcObject = stream;
@@ -71,21 +72,22 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
         console.log('กล้องถ่ายรูปเริ่มทำงาน');
       })
       .catch(err => console.error('ข้อผิดพลาดในการเข้าถึงกล้อง:', err));
-
+  
     video.addEventListener('play', () => {
       const canvas = this.canvasElement.nativeElement;
-      const displaySize = { width: video.width, height: video.height };
+      const displaySize = { width: video.videoWidth, height: video.videoHeight };
       faceapi.matchDimensions(canvas, displaySize);
-
+  
       setInterval(async () => {
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
           .withFaceLandmarks()
           .withFaceDescriptors();
-
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+  
+        const resizedDetections = faceapi.resizeResults(detections, faceapi.matchDimensions(canvas, displaySize));
       }, 100);
     });
   }
+  
 
   fetchImageData() {
     this.http.get<any[]>(`${this.dataService.apiUrl}/face-detect-img`).subscribe(
@@ -141,7 +143,10 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
         .withFaceLandmarks()
         .withFaceDescriptors();
   
-      const resizedDetections = faceapi.resizeResults(detections, faceapi.matchDimensions(canvas, { width: video.width, height: video.height }));
+      const displaySize = { width: video.videoWidth, height: video.videoHeight };
+      faceapi.matchDimensions(canvas, displaySize);
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
+  
       const faceDescriptor = resizedDetections.length > 0 ? resizedDetections[0].descriptor : null;
   
       if (faceDescriptor) {
@@ -176,7 +181,13 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
   
           Swal.fire({
             title: 'การตรวจสอบเสร็จสมบูรณ์',
-            text: `ชื่อ: ${this.verificationResult.fname}\nนามสกุล: ${this.verificationResult.lname}\nสถานะ: ${this.verificationResult.match ? 'มาเรียน' : 'ไม่มาเรียน'}\nเวลา: ${this.verificationResult.time}`,
+            html: `
+              <strong>ชื่อ:</strong> ${this.verificationResult.fname}<br>
+              <strong>นามสกุล:</strong> ${this.verificationResult.lname}<br>
+              <strong>สถานะ:</strong> ${this.verificationResult.match ? 'มาเรียน' : 'ไม่มาเรียน'}<br>
+              <strong>เวลา:</strong> ${this.verificationResult.time}<br>
+              <strong>ผลลัพธ์:</strong> ${this.verificationResult.match ? 'ตรง' : 'ไม่ตรง' }
+            `,
             icon: 'success',
             confirmButtonText: 'ตกลง'
           }).then(() => {
@@ -202,6 +213,7 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
       });
     }
   }
+  
   
 
   captureImageFromVideo(video: HTMLVideoElement): Promise<Blob> {

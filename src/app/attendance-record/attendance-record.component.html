@@ -1,29 +1,49 @@
-<div class="container">
-  <h1>หัวข้อ : {{ checklist }}</h1>
-  <h2>รายละเอียดการเช็คชื่อ</h2>
-  
-  <div class="search-bar">
-    <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาชื่อหรือรหัสนิสิต" />
-  </div>
-  
-  <table class="table">
-    <thead>
-      <tr>
-        <th>รหัสนิสิต</th>
-        <th>ชื่อ-นามสกุล</th>
-        <th>สถานะ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let detail of filteredDetails()">
-        <td>{{ detail.std_id }}</td>
-        <td>{{ detail.std_name }}</td>
-        <td>{{ detail.status }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header text-center bg-primary text-white">
+      <h1 class="mb-0">หัวข้อ : {{ checklist }}</h1>
+    </div>
+    <div class="card-body">
+      <h2 class="text-center mb-4">รายละเอียดการเช็คชื่อ</h2>
 
-  <button class="btn-back" (click)="goBack()">
-    <i class="fa fa-arrow-left"></i> ย้อนกลับ
-  </button>
+      <div class="input-group mb-4">
+        <input type="text" class="form-control" [(ngModel)]="searchText" placeholder="ค้นหาชื่อหรือรหัสนิสิต" />
+        <div class="input-group-append">
+          <button class="btn btn-danger" type="button" (click)="resetSearch()">
+            <i class="fas fa-undo-alt"></i> รีเซ็ต
+          </button>
+        </div>
+      </div>      
+
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>รหัสนิสิต</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detail of filteredDetails() | paginate: { itemsPerPage: 10, currentPage: p }">
+            <td>{{ detail.std_id }}</td>
+            <td>{{ detail.std_name }}</td>
+            <td>{{ detail.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-wrapper d-flex justify-content-center mb-4">
+        <pagination-controls (pageChange)="p = $event" 
+                              [previousLabel]="'ก่อนหน้า'"
+                              [nextLabel]="'ถัดไป'">
+        </pagination-controls>
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-secondary" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i> ย้อนกลับ
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
