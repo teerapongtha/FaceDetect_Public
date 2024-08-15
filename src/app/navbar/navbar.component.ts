@@ -35,11 +35,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
   closeMenu() {
     const offcanvasElement = document.getElementById('navbarOffcanvas');
     if (offcanvasElement) {
-      // Check if the Bootstrap Offcanvas class exists and use it
+      // Get or create the offcanvas instance
       const offcanvas = (window as any).bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+      
+      // Manually hide the offcanvas
       offcanvas.hide();
+  
+      // Immediately remove any existing backdrop
+      const backdrop = document.querySelector('.offcanvas-backdrop');
+      if (backdrop) {
+        backdrop.remove();
+      }
     }
   }
+  
 
   logout() {
     localStorage.removeItem('acId');

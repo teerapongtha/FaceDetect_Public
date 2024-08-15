@@ -69,9 +69,9 @@ export class ChecklistStudentComponent implements OnInit {
       this.filteredChecklists = [];
       return;
     }
-
+  
     const url = `${this.dataService.apiUrl}/checklist-data/student/${this.user_id}/subject/${this.selectedSubjectId}`;
-
+  
     this.http.get<Checklist[]>(url).subscribe(
       (data) => {
         this.checklists = data;
@@ -126,11 +126,11 @@ export class ChecklistStudentComponent implements OnInit {
   // Apply search filter
   applySearch() {
     this.filteredChecklists = this.checklists.filter(checklist => {
-      const matchesTitle = checklist.title.toLowerCase().includes(this.searchTitle.toLowerCase());
-      const matchesDate = this.searchDate ? checklist.date === this.searchDate : true;
-      return matchesTitle && matchesDate;
+        const matchesTitle = checklist.title.toLowerCase().includes(this.searchTitle.toLowerCase());
+        const matchesDate = this.searchDate ? checklist.date === this.searchDate : true;
+        return matchesTitle && matchesDate;
     });
-  }
+}
 
   // Reset search filters
   resetSearch() {

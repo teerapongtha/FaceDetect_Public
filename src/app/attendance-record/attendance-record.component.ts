@@ -4,22 +4,28 @@ import { HttpClient } from '@angular/common/http';
 import { DataService } from '../service/data.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxPaginationModule } from 'ngx-pagination'; // Import module
 
 @Component({
   selector: 'app-attendance-record',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule],
   providers: [DataService],
   templateUrl: './attendance-record.component.html',
   styleUrls: ['./attendance-record.component.scss']
 })
 export class AttendanceRecordComponent implements OnInit {
-  checklist: any;
+  checklist: string = '';
   attendanceDetails: any[] = [];
-  checklistId: any;
+  filteredDetails: any[] = [];
+  checklistId: number | null = null;
   searchText: string = '';
-  p: number = 1; // ตัวแปรสำหรับการแบ่งหน้า
+
+  // Pagination properties
+  currentPage: number = 1;
+  pageSize: number = 10;
+  totalPages: number = 0;
+  pages: number[] = [];
+  paginatedDetails: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +35,6 @@ export class AttendanceRecordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Get checklist_id from route parameters
     this.route.params.subscribe(params => {
       this.checklistId = +params['id'];
       this.loadChecklistData();
@@ -41,7 +46,8 @@ export class AttendanceRecordComponent implements OnInit {
     this.http.get(url).subscribe(
       (data: any) => {
         this.checklist = data.title;
-        this.attendanceDetails = data.attendance_details;
+        this.attendanceDetails = Array.isArray(data.attendance_details) ? data.attendance_details : [];
+        this.filterDetails(); // Initial filtering based on any default value (if needed)
       },
       error => {
         console.error('Error fetching attendance record:', error);
@@ -49,17 +55,53 @@ export class AttendanceRecordComponent implements OnInit {
     );
   }
 
-  filteredDetails() {
+  filterDetails() {
     const searchText = this.searchText.toLowerCase();
-    return this.attendanceDetails.filter(detail => 
-      (detail.std_id ? detail.std_id.toString().toLowerCase().includes(searchText) : false) ||
-      (detail.std_name ? detail.std_name.toLowerCase().includes(searchText) : false)
-    );
+    this.filteredDetails = this.attendanceDetails.filter(detail => {
+      const stdId = detail.std_id ? detail.std_id.toString().toLowerCase() : '';
+      const stdName = detail.std_name ? detail.std_name.toLowerCase() : '';
+      return stdId.includes(searchText) || stdName.includes(searchText);
+    });
+    this.calculatePagination();
+  }
+
+  paginateDetails() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedDetails = this.filteredDetails.slice(startIndex, endIndex);
+  }
+
+  calculatePagination() {
+    this.totalPages = Math.ceil(this.filteredDetails.length / this.pageSize);
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    this.paginateDetails();
   }
 
   resetSearch() {
     this.searchText = '';
-    this.p = 1;
+    this.currentPage = 1;
+    this.filterDetails();
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateDetails();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateDetails();
+    }
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateDetails();
+    }
   }
 
   goBack() {

@@ -7,8 +7,8 @@ import { User } from '../model/user.model';
   providedIn: 'root'
 })
 export class DataService {
-  // apiUrl = 'https://teerapong.bowlab.net/FinalProject';
-  apiUrl = 'http://localhost/FinalProject';
+  apiUrl = 'https://teerapong.bowlab.net/FinalProject';
+  // apiUrl = 'http://localhost/FinalProject';
 
   private acIdSubject = new BehaviorSubject<string | null>(null);
   private userDataSubject = new BehaviorSubject<any>(null);

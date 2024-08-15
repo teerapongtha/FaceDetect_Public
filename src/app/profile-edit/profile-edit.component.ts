@@ -35,7 +35,7 @@ export class ProfileEditComponent implements OnInit {
   }
 
   updateProfile(): void {
-    console.log('Updating profile with data:', this.ProfileUpdate); 
+    // console.log('Updating profile with data:', this.ProfileUpdate); 
     if (this.ProfileUpdate.userId) {
       this.http.put(this.dataService.apiUrl + `/profile-edit/${this.ProfileUpdate.userId}`, this.ProfileUpdate).subscribe(() => {
         Swal.fire(

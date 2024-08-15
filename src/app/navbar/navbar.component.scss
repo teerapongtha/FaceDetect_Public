@@ -1,54 +1,54 @@
 .navbar {
-  width: 100%; /* กำหนดความกว้างของ navbar ให้เต็มจอ */
-  padding-left: 0; /* เอา padding ฝั่งซ้ายออก */
-  padding-right: 0; /* เอา padding ฝั่งขวาออก */
+  width: 100%; /* Full-width navbar */
+  padding-left: 0; /* Remove left padding */
+  padding-right: 0; /* Remove right padding */
 }
 
 .container {
-  max-width: 100%; /* กำหนดความกว้างของ container ให้เต็มจอ */
-  padding-left: 0; /* เอา padding ฝั่งซ้ายออก */
-  padding-right: 0; /* เอา padding ฝั่งขวาออก */
+  max-width: 100%; /* Full-width container */
+  padding-left: 0; /* Remove left padding */
+  padding-right: 0; /* Remove right padding */
 }
 
-
-/* ปรับปรุงสไตล์ของ offcanvas */
+/* Offcanvas Styles */
 .offcanvas {
-  background-color: #007bff; /* สีพื้นหลังของ offcanvas */
+  background-color: #007bff; /* Background color */
+  z-index: 1050; /* Ensure offcanvas is above other content */
 }
 
 .offcanvas-header {
-  background-color: #007bff; /* สีพื้นหลังของ offcanvas header */
+  background-color: #007bff; /* Header background color */
 }
 
 .nav-link {
-  color: #ffffff; /* สีข้อความใน offcanvas เป็นสีขาว */
+  color: #ffffff; /* Link color */
 }
 
-i{
-  margin-right: 5px;
+i {
+  margin-right: 5px; /* Spacing between icon and text */
 }
 
-/* ขยายขนาดตัวอักษรและ padding ของเมนูในโหมด responsive */
-@media (max-width: 992px) { /* ปรับแต่งเฉพาะสำหรับหน้าจอที่มีความกว้าง 992px หรือน้อยกว่า */
+/* Responsive Design Adjustments */
+@media (max-width: 992px) {
   .offcanvas-body {
-    padding: 2rem; /* เพิ่มระยะห่างภายในของ offcanvas */
+    padding: 2rem; /* Padding inside offcanvas */
   }
 
   .navbar-nav {
-    font-size: 1.5rem; /* ขนาดตัวอักษรของเมนูใน offcanvas */
+    font-size: 1.5rem; /* Font size of menu items */
   }
 
   .nav-link {
-    padding: 1.25rem; /* เพิ่มระยะห่างรอบๆ เมนู */
+    padding: 1.25rem; /* Padding around menu items */
   }
 }
 
-@media (max-width: 768px) { /* ปรับแต่งเพิ่มเติมสำหรับหน้าจอที่มีความกว้าง 768px หรือน้อยกว่า */
+@media (max-width: 768px) {
   .navbar-nav {
-    font-size: 1rem; /* ขนาดตัวอักษรของเมนูใน offcanvas สำหรับหน้าจอที่เล็ก */
+    font-size: 1rem; /* Font size for smaller screens */
   }
 
   .nav-link {
-    padding: 1.5rem; /* เพิ่มระยะห่างรอบๆ เมนู */
+    padding: 1.5rem; /* Padding around menu items for smaller screens */
   }
 }

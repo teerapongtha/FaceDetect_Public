@@ -136,7 +136,7 @@ export class FaceDetectComponent implements AfterViewInit {
           fname,
           lname,
           distance: distance.toFixed(2),
-          match: distance <= 0.6 // Ensure this threshold matches your `maxDescriptorDistance`
+          match: distance <= 0.6
         };
       } else {
         verificationResult = { fname: 'ไม่พบชื่อ', lname: 'ไม่พบนามสกุล', distance: 'N/A', match: false };
@@ -149,10 +149,9 @@ export class FaceDetectComponent implements AfterViewInit {
     Swal.fire({
       title: 'ผลการตรวจสอบ',
       html: `
-        <p><strong>ชื่อ:</strong> ${verificationResult.fname}</p>
-        <p><strong>นามสกุล:</strong> ${verificationResult.lname}</p>
+        <p><strong>ชื่อ:</strong> ${verificationResult.fname} ${verificationResult.lname}</p>
         <p><strong>ระยะทาง:</strong> ${verificationResult.distance}</p>
-        <p><strong>ผลลัพธ์:</strong> ${verificationResult.match ? 'ตรง' : 'ไม่ตรง'}</p>
+        <p><strong>ผลลัพธ์:</strong> ${verificationResult.match ? 'ใบหน้าตรง' : 'ใบหน้าไม่ตรง'}</p>
       `,
       icon: verificationResult.match ? 'success' : 'error',
       confirmButtonText: 'ตกลง'
@@ -164,6 +163,6 @@ export class FaceDetectComponent implements AfterViewInit {
   }
   
   goBack() {
-    this.router.navigate(['/recognition-manage']); // Update with your actual route
+    this.router.navigate(['/recognition-manage']); 
   }
 }

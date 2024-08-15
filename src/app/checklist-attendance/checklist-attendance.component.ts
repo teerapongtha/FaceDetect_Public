@@ -160,19 +160,36 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
           const currentTime = new Date();
           const timeDisplay = currentTime.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
   
+          // Fetch checklist and subject times
+          const checklistTimes = await this.http.get<any>(`${this.dataService.apiUrl}/checklist-times/${this.checklistId}`).toPromise();
+          const checklistEndTime = new Date(checklistTimes?.checklistEndTime);
+          const subjectEndTime = new Date(checklistTimes?.subjectEndTime);
+  
+          // Determine status based on time comparison
+          const timeAttendance = currentTime; // Use the current time as attendance time
+  
+          let status: string;
+          if (timeAttendance > subjectEndTime) {
+            status = 'ขาดเรียน'; // Absent
+          } else if (timeAttendance > checklistEndTime) {
+            status = 'มาสาย'; // Late
+          } else {
+            status = 'มาเรียน'; // Present
+          }
+  
           this.verificationResult = {
             fname,
             lname,
             distance: distance.toFixed(2),
             match: distance <= 0.6,
-            time: timeDisplay // Display format
+            time: timeDisplay
           };
   
           const imageBlob = await this.captureImageFromVideo(video);
           const formData = new FormData();
           formData.append('img_attendance', imageBlob, 'image.jpg');
           formData.append('std_id', userData.std_id.toString());
-          formData.append('status', 'มาเรียน');
+          formData.append('status', status);
           formData.append('date_attendance', currentTime.toISOString().split('T')[0]); // Format as YYYY-MM-DD
           formData.append('time_attendance', currentTime.toTimeString().split(' ')[0]); // Format as HH:MM:SS
   
@@ -182,11 +199,10 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
           Swal.fire({
             title: 'การตรวจสอบเสร็จสมบูรณ์',
             html: `
-              <strong>ชื่อ:</strong> ${this.verificationResult.fname}<br>
-              <strong>นามสกุล:</strong> ${this.verificationResult.lname}<br>
-              <strong>สถานะ:</strong> ${this.verificationResult.match ? 'มาเรียน' : 'ไม่มาเรียน'}<br>
+              <strong>ชื่อ:</strong> ${this.verificationResult.fname} ${this.verificationResult.lname}<br>
+              <strong>สถานะ:</strong> ${status}<br>
               <strong>เวลา:</strong> ${this.verificationResult.time}<br>
-              <strong>ผลลัพธ์:</strong> ${this.verificationResult.match ? 'ตรง' : 'ไม่ตรง' }
+              <strong>ผลลัพธ์:</strong> ${this.verificationResult.match ? 'ใบหน้าตรง' : 'ใบหน้าไม่ตรง' }
             `,
             icon: 'success',
             confirmButtonText: 'ตกลง'
@@ -198,21 +214,25 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
             });
           });
         } else {
-          this.verificationResult = { fname: 'ไม่ทราบ', lname: 'ไม่ทราบ', distance: 'N/A', match: false, time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) };
+          Swal.fire({
+            title: 'ไม่พบผู้ใช้',
+            text: 'ไม่พบผู้ใช้ที่ตรงกับใบหน้าที่ตรวจสอบ',
+            icon: 'error',
+            confirmButtonText: 'ตกลง'
+          });
         }
-      } else {
-        this.verificationResult = { fname: 'ไม่ทราบ', lname: 'ไม่ทราบ', distance: 'N/A', match: false, time: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) };
       }
     } catch (error) {
-      console.error('การตรวจสอบใบหน้าล้มเหลว:', error);
+      console.error('ข้อผิดพลาดในการตรวจสอบใบหน้า:', error);
       Swal.fire({
         title: 'ข้อผิดพลาด',
-        text: 'การตรวจสอบใบหน้าล้มเหลว',
+        text: 'เกิดข้อผิดพลาดในการตรวจสอบใบหน้า',
         icon: 'error',
         confirmButtonText: 'ตกลง'
       });
     }
   }
+  
   
   
 

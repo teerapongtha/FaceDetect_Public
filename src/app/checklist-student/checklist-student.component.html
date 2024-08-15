@@ -53,12 +53,14 @@
           <div class="mt-auto text-end">
             <!-- Show status if already attended -->
             <p *ngIf="checklist.status === 'มาเรียน'" class="text-success"><strong>สถานะ: มาเรียน</strong></p>
+            <p *ngIf="checklist.status === 'มาสาย'" class="text-warning"><strong>สถานะ: มาสาย</strong></p>
+            <p *ngIf="checklist.status === 'ขาดเรียน'" class="text-danger"><strong>สถานะ: ขาดเรียน</strong></p>
             <!-- Show buttons based on status -->
-            <ng-container *ngIf="checklist.status !== 'มาเรียน'">
-              <a [routerLink]="['/checklist-attendance', checklist.checklist_id]" class="btn btn-primary">
-                <i class="fas fa-edit"></i> ทำการเช็คชื่อ
-              </a>
-            </ng-container>
+              <ng-container *ngIf="checklist.status !== 'มาเรียน' && checklist.status !== 'มาสาย' && checklist.status !== 'ขาดเรียน'">
+                <a [routerLink]="['/checklist-attendance', checklist.checklist_id]" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> ทำการเช็คชื่อ
+                </a>
+              </ng-container>
           </div>
         </div>
       </li>

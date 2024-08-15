@@ -138,7 +138,7 @@ export class StudentManageComponent implements OnInit {
       confirmButtonText: 'ใช่, ลบ!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`${this.dataService.apiUrl}/student-data/${studentId}`).subscribe(() => {
+        this.http.delete(`${this.dataService.apiUrl}/student-delete/${studentId}`).subscribe(() => {
           Swal.fire('ลบสำเร็จ!', 'ข้อมูลนิสิตถูกลบเรียบร้อยแล้ว.', 'success');
           this.loadData();
         });
