@@ -1,26 +1,37 @@
-<div class="container py-5 custom-border-container">
-    <div class="row justify-content-center align-items-center text-center">
-        <div class="col-md-6 d-flex align-items-center">
-            <div class="text-login w-100">
-                <h1 class="display-4">เข้าสู่ระบบ</h1>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <h1 class="h3 mb-4 fw-bold text-center">
+                    <i class="fas fa-sign-in-alt me-2"></i>เข้าสู่ระบบ
+                </h1>
                 <form>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="text" id="email" name="email" class="form-control" placeholder="ระบุอีเมล" #email required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="ระบุอีเมล" #email required>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password:</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="ระบุรหัสผ่าน" #password required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="ระบุรหัสผ่าน" #password required>
+                        </div>
                     </div>
-                    <button class="btn btn-primary btn-submit" type="submit" (click)="login(email.value, password.value)">
-                        <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                    </button>
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-lg" type="submit" (click)="login(email.value, password.value)">
+                            <i class="fas fa-sign-in-alt me-2"></i>เข้าสู่ระบบ
+                        </button>
+                    </div>
                 </form>
-                <a href="/forget-password" class="btn btn-secondary btn-forgotpsw">ลืมรหัสผ่าน</a>
+                <div class="text-center mt-3">
+                    <a routerLink="/forget-password" class="btn btn-link text-secondary">
+                        <i class="fas fa-unlock-alt me-2"></i>ลืมรหัสผ่าน?
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <img src="../assets/home-img.png" class="img-fluid img-home" alt="Login Image">
         </div>
     </div>
 </div>

@@ -27,6 +27,7 @@ import { ChecklistStudentComponent } from './checklist-student/checklist-student
 import { FaceDetectComponent } from './face-detect/face-detect.component';
 import { ChecklistAttendanceComponent } from './checklist-attendance/checklist-attendance.component';
 import { AttendanceRecordComponent } from './attendance-record/attendance-record.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -34,7 +35,8 @@ export const routes: Routes = [
     { 'path': 'navbar', component: NavbarComponent },
     { 'path': 'login', component: LoginComponent },
     { 'path': 'forget-password', component: ForgetPasswordComponent },
-    {'path' : 'attendance-record/:id', component: AttendanceRecordComponent},
+    { 'path': 'reset-password', component: ResetPasswordComponent },
+    { 'path' : 'attendance-record/:id', component: AttendanceRecordComponent},
     { 'path': 'checklist-attendance/:id', component: ChecklistAttendanceComponent },
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },

@@ -1,114 +1,18 @@
-body {
-    margin: 0; /* เอาระยะห่างนอกออก */
-    background-color: #f0f0f0; /* สีพื้นหลังของ body */
-    display: flex; /* ใช้ Flexbox เพื่อจัดตำแหน่ง */
-    align-items: center; /* จัดแนวแนวตั้ง */
-    justify-content: center; /* จัดแนวนอน */
-    min-height: 100vh; /* ความสูงเต็มหน้าจอ */
-}
-
-.custom-border-container {
-    position: relative; /* ทำให้ .custom-border-container เป็นตำแหน่งอ้างอิง */
-    overflow: hidden; /* ซ่อนขอบที่เกินออกไป */
-    background-color: #ffffff; /* สีพื้นหลังภายในขอบ */
-    padding: 2rem; /* เพิ่มระยะห่างภายใน */
-    min-height: 93vh; /* ความสูงขั้นต่ำของ container */
-    max-width: 70%; /* จำกัดความกว้างของ container */
-    margin-top: 5px;
-    border-left: 2px solid #dee2e6; /* ขอบซ้าย */
-    border-right: 2px solid #dee2e6; /* ขอบขวา */
-    border-radius: 0.5rem; /* ปรับความโค้งมนของมุม */
-    display: flex; /* ใช้ Flexbox เพื่อจัดตำแหน่งเนื้อหาภายใน */
-    flex-direction: row; /* ให้เนื้อหาเรียงในแนวนอน */
-    align-items: center; /* จัดแนวเนื้อหาแนวนอน */
-    justify-content: center; /* จัดแนวเนื้อหาแนวตั้ง */
-    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.1); /* สีพื้นหลังข้างนอก */
-}
-
-.custom-border-container::before,
-.custom-border-container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px; /* ความกว้างของขอบ */
-    background-color: #dee2e6; /* สีของขอบ */
-}
-
-.custom-border-container::before {
-    left: 0;
-}
-
-.custom-border-container::after {
-    right: 0;
-}
-
-.row {
-    width: 100%; /* ใช้ความกว้างเต็มที่ของ .row */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0; /* เอาระยะห่างนอกออก */
-}
-
-.col-md-6 {
-    display: flex;
-    flex-direction: column; /* ให้เนื้อหาในคอลัมน์เรียงในแนวตั้ง */
-    align-items: center; /* จัดแนวเนื้อหาแนวนอน */
-    text-align: center; /* จัดข้อความให้อยู่กลาง */
-}
-
-.display-4 {
-    font-size: 3rem; /* ขนาดตัวอักษรหัวเรื่อง */
-    margin: 0.75rem 0; /* ระยะห่างระหว่างหัวเรื่อง */
-}
-
-.lead {
-    font-size: 2rem; /* ขนาดตัวอักษรคำบรรยาย */
-    margin: 0.75rem 0; /* ระยะห่างระหว่างคำบรรยาย */
-}
-
-.img {
-    max-width: 100%; /* จำกัดความกว้างของภาพ */
-    width: 80%; /* ปรับความกว้างของภาพให้ใหญ่ขึ้น */
-    height: auto; /* ให้ความสูงของภาพปรับตามอัตราส่วน */
-}
-
-/* Media Queries สำหรับอุปกรณ์ที่มีขนาดหน้าจอเล็กลง */
-@media (max-width: 768px) {
-    .custom-border-container {
-        max-width: 100%; /* ขยายความกว้างให้เต็มหน้าจอ */
-        padding: 1rem; /* ลดระยะห่างภายใน */
-    }
-
-    .display-4 {
-        font-size: 2rem; /* ขนาดตัวอักษรหัวเรื่องลดลง */
-        margin: 0.5rem 0; /* ระยะห่างระหว่างหัวเรื่องลดลง */
-    }
-
-    .lead {
-        font-size: 1.25rem; /* ขนาดตัวอักษรคำบรรยายลดลง */
-        margin: 0.5rem 0; /* ระยะห่างระหว่างคำบรรยายลดลง */
-    }
-
-    .img {
-        width: 90%; /* ขยายความกว้างของภาพให้เหมาะสมกับหน้าจอเล็ก */
-    }
-}
-
-@media (max-width: 576px) {
-    .display-4 {
-        font-size: 1.5rem; /* ขนาดตัวอักษรหัวเรื่องลดลงอีก */
-        margin: 0.25rem 0; /* ระยะห่างระหว่างหัวเรื่องลดลงอีก */
-    }
-
-    .lead {
-        font-size: 1rem; /* ขนาดตัวอักษรคำบรรยายลดลงอีก */
-        margin: 0.25rem 0; /* ระยะห่างระหว่างคำบรรยายลดลงอีก */
-    }
-
-    .img {
-        width: 100%; /* ขยายความกว้างของภาพให้เต็มหน้าจอ */
-        margin-top: 10px;
-    }
-}
+// .hero-text {
+//     font-size: clamp(1.5rem, 4vw, 2.5rem); /* Adjust sizes as needed */
+// }
+// /* Adjust padding and margin for small screens */
+// @media (max-width: 576px) {
+//     .ps-5 {
+//         padding-left: 1rem !important;
+//     }
+//     .pe-5 {
+//         padding-right: 1rem !important;
+//     }
+//     .pt-5 {
+//         padding-top: 0.5rem !important; /* Reduce top padding for smaller screens */
+//     }
+//     .mb-4 {
+//         margin-bottom: 1rem !important; /* Adjust bottom margin for smaller screens */
+//     }
+// }
