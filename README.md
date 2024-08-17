@@ -29,6 +29,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 # User For Test
 It will make you like the teacher. To be able to create checklist and add student information.
 Makes it possible to login the student role to attendance record.
+
 test@gmail.com
 1234
 
