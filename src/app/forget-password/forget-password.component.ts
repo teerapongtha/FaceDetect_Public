@@ -62,7 +62,7 @@ export class ForgetPasswordComponent {
     )
     .subscribe((response: any) => {
       Swal.close(); // ปิด Swal loading
-
+    
       if (response?.status === 'success') {
         this.successMessage = 'ทำการส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลของคุณแล้ว';
         Swal.fire({
@@ -78,7 +78,7 @@ export class ForgetPasswordComponent {
         this.email = ''; // Clear the input field
         this.router.navigate(['/login']);
       } else {
-        this.errorMessage = response?.message || 'เกิดข้อผิดพลาดที่ไม่คาดคิด';
+        this.errorMessage = response?.message || 'กรุณาระบุ email ให้ถูกต้อง';
         Swal.fire({
           icon: 'error',
           title: 'เกิดข้อผิดพลาด',
@@ -91,5 +91,6 @@ export class ForgetPasswordComponent {
         });
       }
     });
+    
   }
 }
