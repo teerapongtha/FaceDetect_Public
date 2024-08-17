@@ -27,6 +27,8 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 # User For Test
+It will make you like the teacher. To be able to create checklist and add student information.
+Makes it possible to login the student role to attendance record.
 test@gmail.com
 1234
 
