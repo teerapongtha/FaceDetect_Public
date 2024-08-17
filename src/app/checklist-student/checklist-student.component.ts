@@ -24,6 +24,8 @@ export class ChecklistStudentComponent implements OnInit {
   user_id: any;
   searchTitle: string = '';
   searchDate: string = '';
+  subjectTimes: { [key: string]: { time_start: string, time_end: string } } = {};
+  pastAttendancesUpdated: boolean = false; // Flag to track if past attendances have been updated
 
   constructor(private dataService: DataService, private http: HttpClient, private route: Router) { }
 
@@ -32,7 +34,6 @@ export class ChecklistStudentComponent implements OnInit {
     this.getCurrentTime();
   }
 
-  // Get user data and subjects
   getUserData() {
     this.dataService.getUserData().subscribe(userData => {
       if (userData) {
@@ -44,7 +45,6 @@ export class ChecklistStudentComponent implements OnInit {
     });
   }
 
-  // Get subjects for the student
   getSubjects(std_id: any) {
     this.http.get<any[]>(`${this.dataService.apiUrl}/subject-student-list/${std_id}`).subscribe(
       (data) => {
@@ -62,49 +62,57 @@ export class ChecklistStudentComponent implements OnInit {
     );
   }
 
-  // Load checklists based on the selected subject
   loadChecklist() {
     if (!this.selectedSubjectId) {
       this.checklists = [];
       this.filteredChecklists = [];
       return;
     }
-  
-    const url = `${this.dataService.apiUrl}/checklist-data/student/${this.user_id}/subject/${this.selectedSubjectId}`;
-  
-    this.http.get<Checklist[]>(url).subscribe(
-      (data) => {
-        this.checklists = data;
-        this.applySearch(); // Apply search after loading checklists
+
+    this.http.get<any>(`${this.dataService.apiUrl}/subject-time/${this.selectedSubjectId}`).subscribe(
+      (times) => {
+        this.subjectTimes[this.selectedSubjectId] = times;
+        const url = `${this.dataService.apiUrl}/checklist-data/student/${this.user_id}/subject/${this.selectedSubjectId}`;
+
+        this.http.get<Checklist[]>(url).subscribe(
+          (data) => {
+            const currentDate = this.getCurrentDate();
+            this.checklists = data.filter(checklist => checklist.date === currentDate);
+            this.applySearch();
+          },
+          (error) => {
+            console.error('เกิดข้อผิดพลาดในการดึงข้อมูลเช็คชื่อ:', error);
+            if (error.status === 404) {
+              this.checklists = [];
+              this.filteredChecklists = [];
+            }
+          }
+        );
+
+        if (!this.pastAttendancesUpdated) {
+          this.updatePastAttendances(); // Update past attendances only if not done already
+        }
       },
       (error) => {
-        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลเช็คชื่อ:', error);
-        if (error.status === 404) {
-          this.checklists = [];
-          this.filteredChecklists = [];
-        }
+        console.error('เกิดข้อผิดพลาดในการดึงเวลา:', error);
       }
     );
   }
 
-  // Handle subject change
   onSubjectChange(event: any) {
     this.selectedSubjectId = event.target.value;
     this.loadChecklist();
   }
 
-  // Apply search filter
   searchChecklist() {
     this.applySearch();
   }
 
-  // Get subject name based on subject_id
   getSubjectName(subject_id: any): string {
     const subject = this.subjects.find(s => s.subject_id === subject_id);
     return subject ? subject.subject_name : '';
   }
 
-  // Format date to Thai format
   formatDateThai(date: string): string {
     const months = [
       'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
@@ -116,26 +124,116 @@ export class ChecklistStudentComponent implements OnInit {
     return `${day} ${thaiMonth} ${thaiYear}`;
   }
 
-  // Update current time every second
+  getCurrentDate(): string {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   getCurrentTime() {
     setInterval(() => {
       this.currentTime = new Date();
     }, 1000);
   }
 
-  // Apply search filter
   applySearch() {
     this.filteredChecklists = this.checklists.filter(checklist => {
         const matchesTitle = checklist.title.toLowerCase().includes(this.searchTitle.toLowerCase());
         const matchesDate = this.searchDate ? checklist.date === this.searchDate : true;
         return matchesTitle && matchesDate;
     });
-}
+  }
 
-  // Reset search filters
   resetSearch() {
     this.searchTitle = '';
     this.searchDate = '';
     this.applySearch();
+  }
+
+  checkAttendance(checklist: Checklist) {
+    const currentDate = new Date();
+    const checklistDate = new Date(checklist.date);
+    const subjectTimes = this.subjectTimes[this.selectedSubjectId] || {};
+  
+    console.log('Current Date:', currentDate);
+    console.log('Checklist Date:', checklistDate);
+    console.log('Subject Times:', subjectTimes);
+  
+    if (currentDate.toDateString() !== checklistDate.toDateString()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'ไม่สามารถเช็คชื่อได้',
+        text: 'วันนี้ไม่ตรงกับวันที่เช็คชื่อ'
+      });
+      return;
+    }
+  
+    const currentTimeStr = this.currentTime.toLocaleTimeString('th-TH', { hour12: false });
+    const timeStart = subjectTimes.time_start;
+    const timeEnd = subjectTimes.time_end;
+  
+    console.log('Current Time:', currentTimeStr);
+    console.log('Time Start:', timeStart);
+    console.log('Time End:', timeEnd);
+  
+    if (currentTimeStr < timeStart) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'ไม่สามารถเช็คชื่อได้',
+        text: 'ยังไม่ถึงเวลาเช็คชื่อ'
+      });
+      return;
+    }
+  
+    if (currentTimeStr > timeEnd) {
+      Swal.fire({
+        icon: 'error',
+        title: 'หมดเวลาเช็คชื่อ',
+        text: 'คุณจะถูกบันทึกเป็นขาดเรียน'
+      }).then(() => {
+        this.recordAttendance(checklist.checklist_id, 'ขาดเรียน');
+      });
+      return;
+    }
+  
+    this.route.navigate(['/checklist-attendance', checklist.checklist_id]);
+  }
+  
+  recordAttendance(checklistId: number, status: string) {
+    this.http.post(`${this.dataService.apiUrl}/update-attendance`, {
+      checklist_id: checklistId,
+      std_id: this.user_id,
+      status: status
+    }).subscribe(
+      () => {
+        Swal.fire('บันทึกสำเร็จ', '', 'success');
+        this.loadChecklist();
+      },
+      (error) => {
+        console.error('เกิดข้อผิดพลาดในการบันทึกข้อมูลเช็คชื่อ:', error);
+        Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลเช็คชื่อได้', 'error');
+      }
+    );
+  }
+
+  updatePastAttendances() {
+    if (this.pastAttendancesUpdated) {
+      return; // Skip update if it has already been done
+    }
+
+    this.http.post(`${this.dataService.apiUrl}/update-past-attendance`, {
+      std_id: this.user_id,
+      subject_id: this.selectedSubjectId
+    }).subscribe(
+      () => {
+        this.pastAttendancesUpdated = true; // Set flag to true after successful update
+        console.log('Past attendances updated successfully');
+      },
+      (error) => {
+        console.error('Error updating past attendances:', error);
+      }
+    );
   }
 }

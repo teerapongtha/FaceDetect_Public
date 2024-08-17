@@ -35,26 +35,30 @@
     </div>
 
     <!-- Report Table -->
-    <div *ngIf="filteredReportData.length > 0" class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th>วันที่เรียน</th>
-                    <th>จำนวนนิสิตที่มาเรียน</th>
-                    <th>จำนวนนิสิตที่ขาดเรียน</th>
-                    <th>จำนวนนิสิตทั้งหมด</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let entry of filteredReportData">
-                    <td>{{ formatDateThai(entry.date) }}</td>
-                    <td>{{ entry.total_attended }}</td>
-                    <td>{{ entry.total_absent }}</td>
-                    <td>{{ entry.total_students }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<!-- Report Table -->
+<div *ngIf="filteredReportData.length > 0" class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>วันที่เรียน</th>
+                <th>จำนวนนิสิตที่มาเรียน</th>
+                <th>จำนวนนิสิตที่ขาดเรียน</th>
+                <th>จำนวนนิสิตที่มาสาย</th> <!-- New Column for Late Students -->
+                <th>จำนวนนิสิตทั้งหมด</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let entry of filteredReportData">
+                <td>{{ formatDateThai(entry.date) }}</td>
+                <td>{{ entry.total_attended }}</td>
+                <td>{{ entry.total_absent }}</td>
+                <td>{{ entry.total_late }}</td>
+                <td>{{ entry.total_students }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 
     <!-- Alert Section -->
     <div *ngIf="filteredReportData.length === 0" class="mt-4 alert alert-danger">

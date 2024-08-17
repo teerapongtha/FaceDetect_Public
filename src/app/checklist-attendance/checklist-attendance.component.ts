@@ -160,18 +160,15 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
           const currentTime = new Date();
           const timeDisplay = currentTime.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
   
-          // Fetch checklist and subject times
+          // Fetch checklist end time
           const checklistTimes = await this.http.get<any>(`${this.dataService.apiUrl}/checklist-times/${this.checklistId}`).toPromise();
           const checklistEndTime = new Date(checklistTimes?.checklistEndTime);
-          const subjectEndTime = new Date(checklistTimes?.subjectEndTime);
   
           // Determine status based on time comparison
           const timeAttendance = currentTime; // Use the current time as attendance time
   
           let status: string;
-          if (timeAttendance > subjectEndTime) {
-            status = 'ขาดเรียน'; // Absent
-          } else if (timeAttendance > checklistEndTime) {
+          if (timeAttendance > checklistEndTime) {
             status = 'มาสาย'; // Late
           } else {
             status = 'มาเรียน'; // Present
@@ -182,7 +179,8 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
             lname,
             distance: distance.toFixed(2),
             match: distance <= 0.6,
-            time: timeDisplay
+            time: timeDisplay,
+            status // Add status to the result
           };
   
           const imageBlob = await this.captureImageFromVideo(video);
@@ -202,7 +200,7 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
               <strong>ชื่อ:</strong> ${this.verificationResult.fname} ${this.verificationResult.lname}<br>
               <strong>สถานะ:</strong> ${status}<br>
               <strong>เวลา:</strong> ${this.verificationResult.time}<br>
-              <strong>ผลลัพธ์:</strong> ${this.verificationResult.match ? 'ใบหน้าตรง' : 'ใบหน้าไม่ตรง' }
+              <strong>ผลลัพธ์:</strong> ${this.verificationResult.match ? 'ใบหน้าตรง' : 'ใบหน้าไม่ตรง'}
             `,
             icon: 'success',
             confirmButtonText: 'ตกลง'
@@ -232,8 +230,6 @@ export class ChecklistAttendanceComponent implements AfterViewInit {
       });
     }
   }
-  
-  
   
 
   captureImageFromVideo(video: HTMLVideoElement): Promise<Blob> {

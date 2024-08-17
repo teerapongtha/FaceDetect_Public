@@ -28,6 +28,7 @@ import { FaceDetectComponent } from './face-detect/face-detect.component';
 import { ChecklistAttendanceComponent } from './checklist-attendance/checklist-attendance.component';
 import { AttendanceRecordComponent } from './attendance-record/attendance-record.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ReportPersonalDetailComponent } from './report-personal-detail/report-personal-detail.component';
 
 export const routes: Routes = [
     { 'path': '', component: HomePageComponent },
@@ -36,7 +37,7 @@ export const routes: Routes = [
     { 'path': 'login', component: LoginComponent },
     { 'path': 'forget-password', component: ForgetPasswordComponent },
     { 'path': 'reset-password', component: ResetPasswordComponent },
-    { 'path' : 'attendance-record/:id', component: AttendanceRecordComponent},
+    { 'path': 'attendance-record/:id', component: AttendanceRecordComponent},
     { 'path': 'checklist-attendance/:id', component: ChecklistAttendanceComponent },
     { 'path': 'checklist-manage', component: ChecklistManageComponent },
     { 'path': 'checklist-create', component: ChecklistCreateComponent },
@@ -50,6 +51,7 @@ export const routes: Routes = [
     { 'path': 'recognition-manage', component: RecognitionManageComponent },
     { 'path': 'report', component: ReportComponent },
     { 'path': 'report-personal', component: ReportPersonalComponent },
+    { 'path': 'report-personal-detail/:studentId/:subjectId', component: ReportPersonalDetailComponent },
     { 'path': 'report-week', component: ReportWeekComponent },
     { 'path': 'subject-manage', component: SubjectManageComponent },
     { 'path': 'subject-detail/:subjectId', component: SubjectDetailComponent },

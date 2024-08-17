@@ -32,6 +32,7 @@ import { ChecklistStudentComponent } from './checklist-student/checklist-student
 import { FaceDetectComponent } from './face-detect/face-detect.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { ReportPersonalDetailComponent } from './report-personal-detail/report-personal-detail.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -71,6 +72,7 @@ export const MY_FORMATS = {
     RecognitionManageComponent,
     ReportComponent,
     ReportPersonalComponent,
+    ReportPersonalDetailComponent,
     ReportWeekComponent,
     ForgetPasswordComponent,
     ProfileComponent,
